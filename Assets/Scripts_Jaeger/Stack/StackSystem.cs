@@ -50,9 +50,8 @@ public class StackSystem : SingletonBase<StackSystem>, IStackSystem
         Recipe recipe = CardEventSystem.instance.FindMatch(combined, out List<Card> matchedCards);
         if (recipe != null)
         {
-            List<Card> inputCards = new();
-            inputCards.AddRange(matchedCards.ToList());
-            CardEventSystem.instance.ExecuteRecipe(recipe, inputCards, target_Stack.Top.CardView.transform.position, out List<Card> outputCards);
+            target_Stack.AddStack(input_Stack);
+            CardEventSystem.instance.StartProcess(target_Stack, recipe);
             return true;
         }
 
@@ -80,7 +79,6 @@ public class StackSystem : SingletonBase<StackSystem>, IStackSystem
         stackView.RefreshBounds();
 
         _stackDict.Add(stack.Guid, stack);
-
         return stack;
     }
 }

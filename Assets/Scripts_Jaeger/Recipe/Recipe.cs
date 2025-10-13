@@ -11,13 +11,16 @@ public class Recipe
     public List<string> Inputs { get; }
     public List<string> Outputs { get; }
     public float WorkTime { get; }
-
+    public IGetUsedCard GetUsedCard { get; private set; }
+    public IGenerateCard GetGenerateCard { get; private set; }
     public Recipe(string id, IEnumerable<string> inputs, IEnumerable<string> outputs, float workTime)
     {
         Id = id;
         Inputs = inputs.ToList();
         Outputs = outputs.ToList();
         WorkTime = workTime;
+
+        InitStrategy();
     }
 
     public bool Matches(IEnumerable<string> cardIds)
@@ -28,5 +31,12 @@ public class Recipe
         for (int i = 0; i < a.Count; i++)
             if (a[i] != b[i]) return false;
         return true;
+    }
+
+    // 根据配方类型初始化策略
+    private void InitStrategy()
+    {
+        GetUsedCard = new GetUsedCard_所有卡牌();
+        GetGenerateCard = new GenerateCard_默认();
     }
 }

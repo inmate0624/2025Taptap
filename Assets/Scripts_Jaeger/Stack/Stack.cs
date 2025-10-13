@@ -18,6 +18,8 @@ public class Stack
     public Action OnDestroy { get; set; }
     // 堆变化    
     public Action OnStackChange { get; set; }
+    private bool isDirty = false;
+    public bool IsDirty => isDirty;
     public Stack(bool isAutoId = true)
     {
         Guid = System.Guid.NewGuid().ToString();
@@ -33,7 +35,8 @@ public class Stack
         _cards.Add(card);
         card.IndexInStack = _cards.Count;
         card.ChangeStack(this);
-        OnStackChange?.Invoke();
+
+        MarkDirty();
     }
     public void AddStack(Stack stack)
     {
@@ -45,8 +48,7 @@ public class Stack
         foreach (var card in cards){
             AddCard(card);
         }
-
-        OnStackChange?.Invoke();
+        MarkDirty();
     }
     // 移除卡牌，可能是放进新堆
     public void RemoveCard(Card card, Stack newStack = null)
@@ -59,16 +61,15 @@ public class Stack
                 card.ChangeStack(new Stack());
             }
         }
-
-        OnStackChange?.Invoke();
-
         if (_cards.Count == 0){
             Destroy();
+            return;
         }
+        MarkDirty();
     }
     public void Destroy()
     {
-        OnStackChange?.Invoke();
+        MarkDirty();
         
         Debug.Log($"摧毁堆{Id}");
         foreach (var card in _cards){
@@ -76,6 +77,13 @@ public class Stack
         }
         OnDestroy?.Invoke();
     }
+    public void MarkDirty()
+    {
+        isDirty = true;
+        OnStackChange?.Invoke();
+    }
+    public void ClearDirty() => isDirty = false;
+    
     // 最底部卡牌
     public Card Bottom => _cards.Count > 0 ? _cards[^1] : null;
     // 最顶部卡牌

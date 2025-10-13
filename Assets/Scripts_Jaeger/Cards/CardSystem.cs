@@ -15,7 +15,7 @@ public interface ICardSystem
 /// </summary>
 public class CardSystem : SingletonBase<CardSystem>, ICardSystem
 {
-    private readonly List<Card> _cards = new();
+    private readonly Dictionary<string, Card> _cards = new();
     private GameObject _cardPrefab;
     private GameObject _stackPrefab;
     public Card CreateCard(string id, string name, CardType type, bool stackable, Vector2 position)
@@ -32,21 +32,22 @@ public class CardSystem : SingletonBase<CardSystem>, ICardSystem
         card.CardView.transform.SetParent(stack.StackView.transform);
         stack.StackView.transform.position = position;
         
-        _cards.Add(card);
+        _cards.Add(card.Guid, card);
         return card;
     }
     public void DestroyCard(Card card)
     {
-        _cards.Remove(card);
+        _cards.Remove(card.Guid);
         card.Destroy();
     }
-    public IEnumerable<Card> AllCards => _cards;
+    public Card GetCard(string Guid) => _cards[Guid];
+    public IEnumerable<Card> AllCards => _cards.Values;
     public void ShowAllCards()
     {
         Debug.Log("-----展示现有卡-----");
         foreach (var card in _cards)
         {
-            Debug.Log($"{card.Name} {card.GuidPrefix}");
+            Debug.Log($"{card.Value.Name} {card.Value.GuidPrefix}");
         }
         Debug.Log("-----展示完毕-----");
     }
