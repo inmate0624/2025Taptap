@@ -2,6 +2,9 @@
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// 配方数据层
+/// </summary>
 public class Recipe
 {
     public string Id { get; }
@@ -9,7 +12,7 @@ public class Recipe
     public List<string> Outputs { get; }
     public float WorkTime { get; }
 
-    public Recipe(string id, IEnumerable<string> inputs, IEnumerable<string> outputs, float workTime = 0)
+    public Recipe(string id, IEnumerable<string> inputs, IEnumerable<string> outputs, float workTime)
     {
         Id = id;
         Inputs = inputs.ToList();

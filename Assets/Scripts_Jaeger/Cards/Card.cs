@@ -2,19 +2,24 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// 卡牌实例层
+/// </summary>
 public class Card
 {
-    public string Guid { get; private set; }
+    public readonly string Guid;
     public string Id { get; private set; }
     public string Name { get; private set; }
     public CardType Type { get; private set; }
     public bool IsStackable { get; private set; }
-
-    public Stack ParentStack { get; private set; }
     public int IndexInStack { get; set; }
     public Action OnDestroy { get; set; }
     public Action OnStackChange { get; set; }
+    public Stack ParentStack { get; private set; }
     public CardView CardView { get; set; }
+    // 字段
+    public bool isTop => IndexInStack == ParentStack.Cards.Count;
+    public bool isBottom => IndexInStack == 1;
     public Card(string id, string name, CardType type, bool stackable)
     {
         Guid = System.Guid.NewGuid().ToString();

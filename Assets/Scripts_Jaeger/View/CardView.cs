@@ -2,25 +2,26 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// 卡牌View层
+/// </summary>
 public class CardView : MonoBehaviour, IInputDetector
 {
     private TextMeshPro _nameText;
     private TextMeshPro _GuidText;
     private TextMeshPro _StackText;
     private Collider2D _collider2D;
-    private Rigidbody2D _rigidbody2D;
     public Card Card { get; private set; }
-    private bool _isDragging = false;
-
-    private List<CardView> _cardGroup;
+    public bool IsDragging = false;
+    private List<CardView> _cardGroup = new();
     private Vector3 _dragOffset;
+    private StackView _stackView => Card.ParentStack.StackView;
     void Awake()
     {
         _nameText = GetComponentInChildren<TextMeshPro>();
         _GuidText = transform.Find("Guid").GetComponent<TextMeshPro>();
         _StackText = transform.Find("Stack").GetComponent<TextMeshPro>();
         _collider2D = GetComponent<Collider2D>();
-        _rigidbody2D = GetComponent<Rigidbody2D>();
     }
     void Update()
     {
@@ -31,27 +32,27 @@ public class CardView : MonoBehaviour, IInputDetector
         card.CardView = this;
         Card = card;
         _nameText.text = card.Name;
-        // 设置图标、显示文本等
-
+        
         Card.OnDestroy += OnCardDestroy;
         Card.OnStackChange += OnStackChange;
     }
+
     private void OnStackChange(){
         // 取前6位
         _GuidText.text = Card.Guid.Substring(0, 6);
         _StackText.text = Card.ParentStack.Id;
         if (Card.ParentStack.StackView != null){
             transform.SetParent(Card.ParentStack.StackView.transform);
-
-            //TODO: 需要优化
+            //TODO: 需要优化吗
             _collider2D.enabled = true;
             this.enabled = true;
         }
     }
+
     public void OnDragStart()
     {
-        _isDragging = true;
-        // Debug.Log($"OnDragStart: {Card.GuidPrefix}");
+        IsDragging = true;
+        _stackView.CancelCollider();
 
         var mousePosition = Utility.GetMousePosition();
         _dragOffset = transform.position - mousePosition;
@@ -62,42 +63,51 @@ public class CardView : MonoBehaviour, IInputDetector
                 _cardGroup.Add(card.CardView);
             }
         }
-
         // 检测自己是否是堆的底部
         if (Card.IndexInStack != 1){
             SplitStack();
         }
     }    
-    
     public void OnDrag()
     {
-        if (!_isDragging) return;
+        if (!IsDragging) return;
 
         Debug.Log($"OnDrag: {Card.GuidPrefix}");
         var mousePosition = Utility.GetMousePosition();
         var newPosition = mousePosition + _dragOffset;
 
-
-        for (int i = 0; i < _cardGroup.Count; i++)
-        {
-            _cardGroup[i].transform.position = newPosition + new Vector3(0, i * StackSystem.STACK_OFFSET, 0);
-        }
+        // 移动堆
+        _stackView.transform.position = newPosition;
     }
+    
     public void OnDragEnd()
     {
-        _isDragging = false;
-        // Debug.Log($"OnDragEnd: {Card.GuidPrefix}");
+        IsDragging = false;
 
+
+        MergeCard();
+
+        //清除_cardGroup
+        _cardGroup.Clear();
+
+        if (_stackView != null) _stackView.EnableCollider();
+    }
+
+    private void MergeCard(){
         // 检测鼠标位置是否与另一个卡牌碰撞
-        Vector3 mousePosition = Input.mousePosition;
-        mousePosition.z = - Camera.main.transform.position.z;
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        Vector3 worldPosition = Utility.GetMousePosition();
         Collider2D[] colliders = Physics2D.OverlapPointAll(worldPosition);
-
         foreach (var collider in colliders)
         {
             if (collider.gameObject == gameObject) continue;
             if (collider.gameObject.CompareTag("Card")){
+
+                var otherCardView = collider.gameObject.GetComponent<CardView>();
+                // 一定要是牌堆顶的卡牌
+                if (otherCardView.Card.IndexInStack != otherCardView.Card.ParentStack.Cards.Count){
+                    continue;
+                }
+
                 bool merged = StackSystem.instance.TryMerge(collider.gameObject.GetComponent<CardView>().Card, Card);
                 if (merged){
                     Debug.Log("合并成功");
@@ -107,9 +117,6 @@ public class CardView : MonoBehaviour, IInputDetector
                 }
             }
         }
-
-        //清除_cardGroup
-        _cardGroup.Clear();
     }
     private void SplitStack(){
         List<Card> cards = new();
@@ -119,7 +126,9 @@ public class CardView : MonoBehaviour, IInputDetector
                 cards.Add(card);
             }
         }
+        _stackView.EnableCollider();
         StackSystem.instance.CreateNewStack(cards);
+        _stackView.CancelCollider();
     }
     private void OnCardDestroy()
     {

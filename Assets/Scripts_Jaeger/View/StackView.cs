@@ -1,38 +1,47 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
+/// <summary>
+/// 卡堆View层
+/// </summary>
 public class StackView : MonoBehaviour
 {
     public Stack Stack { get; private set; }
-    [SerializeField]
     private BoxCollider2D _collider2D;
-    [SerializeField]
-    private Transform _colliderTransform;
+
     Vector2 _originalOffset;
-    private bool _isDragging = false;
     void Awake()
     {
-        _collider2D = transform.Find("StackCollider").GetComponent<BoxCollider2D>();
-        _colliderTransform = transform.Find("StackCollider");
+        _collider2D = GetComponent<BoxCollider2D>();
     }
     void Update()
     {
-        _originalOffset = Stack.Top.CardView.transform.position;
-
-        _colliderTransform.position = _originalOffset;
+        //TODO: 修改卡牌位置（其实不用持续更新？）
+        UpdateCardsPosition();
     }
+
+    private void UpdateCardsPosition(){
+        foreach (var card in Stack.Cards){
+            card.CardView.transform.localPosition = new Vector3(0, (card.IndexInStack-1) * StackSystem.STACK_OFFSET, 0);
+        }
+    }
+
+    public void CancelCollider() => _collider2D.enabled = false;
+    public void EnableCollider() => _collider2D.enabled = true;
+    
     public void Bind(Stack stack)
     {
         Stack = stack;
         Stack.StackView = this;
 
         Stack.OnDestroy += OnStackDestroy;
-        Stack.OnChange += OnStackChange;
+        Stack.OnStackChange += OnStackChange;
     }
 
     public void RefreshBounds(){
         if (Stack == null || Stack.Cards.Count == 0){
-            Debug.LogError("Stack is null or has no cards");
+            Debug.LogWarning("Stack is null or has no cards");
             return;
         };
         float height = (Stack.Cards.Count-1) * (-StackSystem.STACK_OFFSET);
@@ -55,6 +64,6 @@ public class StackView : MonoBehaviour
         if (!EditorApplication.isPlaying) return;
         // 绘制Collider的边界
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(_colliderTransform.position, _collider2D.size);
+        Gizmos.DrawWireCube(transform.position + new Vector3(_collider2D.offset.x, _collider2D.offset.y, 0), _collider2D.size);
     }
 }

@@ -24,16 +24,9 @@ public class CardSystem : SingletonBase<CardSystem>, ICardSystem
         cardView.Bind(card);
         cardView.name = $"Card-{card.Name}-{card.Guid.Substring(0, 6)}";
         
-        var stack = new Stack();
-        stack.AddCard(card);
-
-        _stackPrefab = Resources.Load<GameObject>("Stack");
-        StackView stackView = GameObject.Instantiate(_stackPrefab, Vector3.zero, Quaternion.identity).GetComponent<StackView>();    
-        stackView.Bind(stack);
-        stackView.RefreshBounds();
-
-        card.CardView.transform.SetParent(stackView.transform);
-        cardView.transform.position = position;
+        Stack stack = StackSystem.instance.CreateNewStack(new List<Card> { card });
+        card.CardView.transform.SetParent(stack.StackView.transform);
+        stack.StackView.transform.position = position;
         
         _cards.Add(card);
         return card;

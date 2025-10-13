@@ -30,6 +30,12 @@ public class CardEventSystem : SingletonBase<CardEventSystem>
 
     public void ExecuteRecipe(Recipe recipe, List<Card> inputCards,Vector2 position, out List<Card> outputCards)
     {
+        // 等待时间
+        float waitTime = recipe.WorkTime;
+
+        
+
+        Debug.Log($"执行配方{recipe.Id}，生成位置：{position}");
         outputCards = new();   
         foreach (var card in inputCards)
         {

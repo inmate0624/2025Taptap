@@ -8,10 +8,8 @@ public class TestManager : MonoBehaviour
     private static TestManager _instance;
     public static TestManager Instance;
 
-    // public StackSystem stackSystem;
-    // public CardEventSystem recipeSystem;
-    // public CardSystem cardSystem;
-
+    [SerializeField]
+    private bool _showDebug = false;
     CardView _draggingCardView;
     private void Awake()
     {
@@ -24,9 +22,13 @@ public class TestManager : MonoBehaviour
         {
             Destroy(this);
         }
-        // cardSystem = new();
-        // recipeSystem = new(cardSystem);
-        // stackSystem = new(recipeSystem, cardSystem);
+
+    }
+
+    void Start()
+    {
+
+  
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -36,6 +38,8 @@ public class TestManager : MonoBehaviour
 
     void Update()
     {
+        TestInput();
+
         LayerMask layerMask = LayerMask.GetMask("Card");
         List<RaycastHit2D> hit = Physics2D.RaycastAll(Utility.GetMousePosition(), Vector2.zero, layerMask).ToList();
         hit.RemoveAll(h => h.collider.gameObject.layer != LayerMask.NameToLayer("Card"));
@@ -43,8 +47,7 @@ public class TestManager : MonoBehaviour
         {
             return;
         }
-
-        Debug.Log("Hit: " + hit[0].collider.name);
+        if (_showDebug) Debug.Log("Hit: " + hit[0].collider.name);
         if (Input.GetMouseButtonDown(0)){
             if (_draggingCardView != null) return;
 
@@ -57,6 +60,31 @@ public class TestManager : MonoBehaviour
 
             _draggingCardView.OnDragEnd();
             _draggingCardView = null;
+        }
+    }
+
+    private void TestInit(){
+        // 注册配方：Wood + Stone → Campfire
+        CardEventSystem.instance.RegisterRecipe(new Recipe("r1", new[] { "wood", "stone" }, new []{"campfire"}, 1f));
+        CardSystem.instance.CreateCard("wood", "Wood", CardType.Resource, true, Vector2.zero);
+        CardSystem.instance.CreateCard("stone", "Stone", CardType.Resource, true, Vector2.zero);  
+    }
+
+    private void TestInput(){
+        if (Input.GetKey(KeyCode.Space))
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) 
+            {
+                CardSystem.instance.CreateCard("wood", "Wood", CardType.Resource, true, Vector2.zero);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2)) 
+            {
+                CardSystem.instance.CreateCard("stone", "Stone", CardType.Resource, true, Vector2.zero);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.S)){
+            CardSystem.instance.ShowAllCards();
         }
     }
 }
