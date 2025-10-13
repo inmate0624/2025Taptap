@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// 卡牌包View层
+/// </summary>
 public class CardPackView : MonoBehaviour
 {
     CardPack _cardPack;

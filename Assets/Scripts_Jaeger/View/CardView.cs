@@ -72,7 +72,7 @@ public class CardView : MonoBehaviour, IInputDetector
     {
         if (!IsDragging) return;
 
-        Debug.Log($"OnDrag: {Card.GuidPrefix}");
+        // Debug.Log($"OnDrag: {Card.GuidPrefix}");
         var mousePosition = Utility.GetMousePosition();
         var newPosition = mousePosition + _dragOffset;
 

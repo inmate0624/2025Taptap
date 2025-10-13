@@ -9,6 +9,7 @@ public interface IStackSystem
     bool TryMerge(Stack target, Card input);
     bool TryMerge(Stack A_Stack, Stack B_Stack);
     Stack CreateNewStack(List<Card> cards);
+    Stack GetStack(string guid);
 }
 
 /// <summary>
@@ -16,17 +17,11 @@ public interface IStackSystem
 /// </summary>
 public class StackSystem : SingletonBase<StackSystem>, IStackSystem
 {
-
-    private const float _offset = 1f;
     private static int _stackId = 0;
     public static int StackId => _stackId++;
     public static void ResetStackId() => _stackId = 0;
     public const float STACK_OFFSET = -0.8f;
     private readonly Dictionary<string, Stack> _stackDict = new();
-    void Start()
-    {
-
-    }
 
     public bool TryMerge(Card target, Card input) => TryMerge(target.ParentStack, input.ParentStack);
     public bool TryMerge(Stack target, Card input) => TryMerge(target, input.ParentStack);
@@ -64,6 +59,13 @@ public class StackSystem : SingletonBase<StackSystem>, IStackSystem
         Debug.Log("TryMerge，但并未合成成功");
         return false;
     }
+    
+    /// <summary>
+    /// 唯一的创建卡堆入口
+    /// </summary>
+    /// <param name="cards">卡牌列表</param>
+    /// <returns></returns>
+    public Stack GetStack(string guid) => _stackDict[guid];
     public Stack CreateNewStack(List<Card> cards)
     {
         var stack = new Stack();
@@ -76,6 +78,9 @@ public class StackSystem : SingletonBase<StackSystem>, IStackSystem
             stack.AddCard(card);
         }
         stackView.RefreshBounds();
+
+        _stackDict.Add(stack.Guid, stack);
+
         return stack;
     }
 }

@@ -8,17 +8,21 @@ using UnityEngine;
 /// </summary>
 public class Stack
 {
+    public readonly string Guid;
     public readonly string Id;
     private readonly List<Card> _cards = new List<Card>();
     public IReadOnlyList<Card> Cards => _cards;
-    public Stack(bool isAutoId = true) => Id = isAutoId ? StackSystem.StackId.ToString() : "-1";
-    public StackView StackView { get; set; }
 
+    public StackView StackView { get; set; }
     // 堆销毁
     public Action OnDestroy { get; set; }
     // 堆变化    
     public Action OnStackChange { get; set; }
-
+    public Stack(bool isAutoId = true)
+    {
+        Guid = System.Guid.NewGuid().ToString();
+        Id = isAutoId ? StackSystem.StackId.ToString() : "-1";
+    }
     public void AddCard(Card card)
     {
         if (_cards.Contains(card)) return;

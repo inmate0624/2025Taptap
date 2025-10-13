@@ -7,4 +7,5 @@ public class RecipeProcess{
     public Recipe recipe;
     public float timer;
     public bool isRunning;
+    
 }

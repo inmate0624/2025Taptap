@@ -9,6 +9,12 @@
       },
       "hash": "38fecf55e4fd94ccfe58a92ed8ad1a529ba1694e"
     },
+    "com.code-philosophy.luban": {
+      "version": "file:luban_unity-main",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.2d.animation": {
       "version": "10.1.3",
       "depth": 1,

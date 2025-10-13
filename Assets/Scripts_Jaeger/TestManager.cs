@@ -27,8 +27,7 @@ public class TestManager : MonoBehaviour
 
     void Start()
     {
-
-  
+        TestInit();
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]

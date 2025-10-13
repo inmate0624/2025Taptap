@@ -9,6 +9,10 @@ public interface ICardSystem
     void DestroyCard(Card card);
     void ShowAllCards();
 }
+
+/// <summary>
+/// 卡牌系统
+/// </summary>
 public class CardSystem : SingletonBase<CardSystem>, ICardSystem
 {
     private readonly List<Card> _cards = new();
@@ -42,7 +46,7 @@ public class CardSystem : SingletonBase<CardSystem>, ICardSystem
         Debug.Log("-----展示现有卡-----");
         foreach (var card in _cards)
         {
-            Debug.Log($"{card.Name}");
+            Debug.Log($"{card.Name} {card.GuidPrefix}");
         }
         Debug.Log("-----展示完毕-----");
     }

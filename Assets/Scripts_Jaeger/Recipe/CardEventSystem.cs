@@ -3,6 +3,9 @@ using System.Linq;
 using Base;
 using UnityEngine;
 
+/// <summary>
+/// 卡牌事件系统（包括配方、单击、长按等）
+/// </summary>
 public class CardEventSystem : SingletonBase<CardEventSystem>
 {
     private readonly List<Recipe> _recipes = new();
@@ -33,7 +36,7 @@ public class CardEventSystem : SingletonBase<CardEventSystem>
         // 等待时间
         float waitTime = recipe.WorkTime;
 
-        
+
 
         Debug.Log($"执行配方{recipe.Id}，生成位置：{position}");
         outputCards = new();   
