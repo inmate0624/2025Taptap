@@ -1,5 +1,6 @@
 ﻿
 using System;
+using cfg;
 using UnityEngine;
 
 /// <summary>
@@ -7,11 +8,14 @@ using UnityEngine;
 /// </summary>
 public class Card
 {
-    public readonly string Guid;
+
     public string Id { get; private set; }
     public string Name { get; private set; }
     public CardType Type { get; private set; }
     public bool IsStackable { get; private set; }
+
+    // Runtime
+    public readonly string Guid;
     public int IndexInStack { get; set; }
     public Action OnDestroy { get; set; }
     public Action OnStackChange { get; set; }
@@ -20,13 +24,13 @@ public class Card
     // 字段
     public bool isTop => IndexInStack == ParentStack.Cards.Count;
     public bool isBottom => IndexInStack == 1;
-    public Card(string id, string name, CardType type, bool stackable)
+    public Card(CardData cardData)
     {
         Guid = System.Guid.NewGuid().ToString();
-        Id = id;
-        Name = name;
-        Type = type;
-        IsStackable = stackable;
+        Id = cardData.ID;
+        Name = cardData.Name;
+        Type = CardType.Resource;
+        IsStackable = true;
     }
 
     public override string ToString() => $"{Name} ({Id}) ({Guid})";

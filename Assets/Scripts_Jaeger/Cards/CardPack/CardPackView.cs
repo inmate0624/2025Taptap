@@ -13,7 +13,7 @@ public class CardPackView : MonoBehaviour
     }
     private void OnClick(){
         foreach (var cardId in _cardPack.CardIds){
-            CardSystem.instance.CreateCard(cardId.ToString(), cardId.ToString(), CardType.Resource, true, transform.position);
+            CardSystem.instance.CreateCardById(cardId.ToString(), transform.position);
         }
     }
 }

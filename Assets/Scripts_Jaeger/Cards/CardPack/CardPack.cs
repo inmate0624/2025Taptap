@@ -9,10 +9,10 @@ using UnityEngine;
 public class CardPack
 {
     public string Guid { get; private set; }
-    public List<int> CardIds { get; private set; }
-    public CardPack(List<int> cardIds)
+    public List<string> CardIds { get; private set; }
+    public CardPack(List<string> cardIds)
     {
         Guid = System.Guid.NewGuid().ToString();
-        CardIds = cardIds;
+        CardIds = cardIds.ToList();
     }
 }

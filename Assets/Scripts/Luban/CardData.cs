@@ -26,7 +26,13 @@ public sealed partial class CardData : Luban.BeanBase
         return new CardData(_buf);
     }
 
+    /// <summary>
+    /// 唯一标识符
+    /// </summary>
     public readonly string ID;
+    /// <summary>
+    /// 卡牌名称
+    /// </summary>
     public readonly string Name;
    
     public const int __ID__ = 55917306;

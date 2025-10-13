@@ -10,7 +10,7 @@ public class GenerateCard_默认 : IGenerateCard
     {
         foreach (var card in recipe.Outputs)
         {
-            CardSystem.instance.CreateCard(card, card, CardType.Resource, true, stack.StackView.transform.position);
+            CardSystem.instance.CreateCardById(card, stack.StackView.transform.position);
         }
     }
 }

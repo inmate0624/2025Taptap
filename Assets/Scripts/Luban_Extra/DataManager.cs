@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using cfg;
 using SimpleJSON;
 using UnityEngine;
@@ -15,4 +16,11 @@ public static class DataManager
         var textAsset = Resources.Load<TextAsset>("Config/" + tableName);
         return JSON.Parse(textAsset.text);
     }
+
+    /// <summary>
+    /// 获取所有卡牌数据
+    /// </summary>
+    /// <returns></returns>
+    public static List<CardData> GetAllCardData() => _tables.CardDataTable.DataList;
+
 }

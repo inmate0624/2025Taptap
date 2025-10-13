@@ -1,28 +1,27 @@
 ﻿
 using System.Collections.Generic;
 using Base;
+using cfg;
 using UnityEngine;
 
-public interface ICardSystem
-{
-    Card CreateCard(string id, string name, CardType type, bool stackable, Vector2 position);
-    void DestroyCard(Card card);
-    void ShowAllCards();
-}
 
 /// <summary>
 /// 卡牌系统
 /// </summary>
-public class CardSystem : SingletonBase<CardSystem>, ICardSystem
+public class CardSystem : SingletonBase<CardSystem>
 {
     private readonly Dictionary<string, Card> _cards = new();
     private GameObject _cardPrefab;
     private GameObject _stackPrefab;
-    public Card CreateCard(string id, string name, CardType type, bool stackable, Vector2 position)
+    public List<CardData> CardDataList => DataManager.GetAllCardData();
+    private string NameToId(string name) => CardDataList.Find(data => data.Name == name).ID;
+    public Card CreateCardByName(string name, Vector2 position) => CreateCardById(NameToId(name), position);
+    public Card CreateCardById(string id, Vector2 position)
     {
+        CardData cardData = CardDataList.Find(data => data.ID == id);
         Debug.Log($"创建卡牌{name}");
 
-        var card = new Card(id, name, type, stackable);
+        var card = new Card(cardData);
         _cardPrefab = Resources.Load<GameObject>("Card");
         CardView cardView = GameObject.Instantiate(_cardPrefab, Vector3.zero, Quaternion.identity).GetComponent<CardView>();
         cardView.Bind(card);
@@ -35,6 +34,7 @@ public class CardSystem : SingletonBase<CardSystem>, ICardSystem
         _cards.Add(card.Guid, card);
         return card;
     }
+
     public void DestroyCard(Card card)
     {
         _cards.Remove(card.Guid);
