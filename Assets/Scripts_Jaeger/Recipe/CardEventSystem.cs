@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Base;
 using UnityEngine;
 
-public class CardEventSystem
+public class CardEventSystem : SingletonBase<CardEventSystem>
 {
-    private readonly CardSystem _cardSystem;
     private readonly List<Recipe> _recipes = new();
 
     public void RegisterRecipe(Recipe recipe) => _recipes.Add(recipe);
-    public CardEventSystem(CardSystem cardSystem)
-    {
-        _cardSystem = cardSystem;
-    }
 
     public Recipe FindMatch(List<Card> cards, out List<Card> matchedCards)
     {
@@ -32,17 +28,17 @@ public class CardEventSystem
         return recipe;
     }
 
-    public void ExecuteRecipe(Recipe recipe, List<Card> inputCards, out List<Card> outputCards)
+    public void ExecuteRecipe(Recipe recipe, List<Card> inputCards,Vector2 position, out List<Card> outputCards)
     {
         outputCards = new();   
         foreach (var card in inputCards)
         {
-            _cardSystem.DestroyCard(card);
+            CardSystem.instance.DestroyCard(card);
         }
 
         foreach (var card in recipe.Outputs)
         {
-            outputCards.Add(_cardSystem.CreateCard(card, card, CardType.Resource, true));
+            outputCards.Add(CardSystem.instance.CreateCard(card, card, CardType.Resource, true, position));
         }
     }
 }

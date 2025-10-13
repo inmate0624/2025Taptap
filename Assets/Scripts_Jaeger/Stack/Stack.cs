@@ -10,7 +10,11 @@ public class Stack
     public Stack(bool isAutoId = true) => Id = isAutoId ? StackSystem.StackId.ToString() : "-1";
     public Stack(string id) => Id = id;
     public StackView StackView { get; set; }
+
+    // 堆销毁
     public Action OnDestroy { get; set; }
+    // 堆变化    
+    public Action OnChange { get; set; }
 
     public void AddCard(Card card)
     {
@@ -23,6 +27,8 @@ public class Stack
         card.IndexInStack = _cards.Count;
         card.ChangeStack(this);
         EventBus.Publish(new StackChangeEvent(this));
+
+        OnChange?.Invoke();
     }
     public void AddStack(Stack stack)
     {
@@ -34,6 +40,8 @@ public class Stack
         foreach (var card in cards){
             AddCard(card);
         }
+        
+        OnChange?.Invoke();
     }
     // 移除卡牌，可能是放进新堆
     public void RemoveCard(Card card, Stack newStack = null)

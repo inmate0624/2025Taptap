@@ -22,7 +22,6 @@ public class CardView : MonoBehaviour, IInputDetector
         _collider2D = GetComponent<Collider2D>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
     }
-
     void Update()
     {
         OnDrag();
@@ -52,7 +51,7 @@ public class CardView : MonoBehaviour, IInputDetector
     public void OnDragStart()
     {
         _isDragging = true;
-        Debug.Log($"OnDragStart: {Card.GuidPrefix}");
+        // Debug.Log($"OnDragStart: {Card.GuidPrefix}");
 
         var mousePosition = Utility.GetMousePosition();
         _dragOffset = transform.position - mousePosition;
@@ -61,8 +60,12 @@ public class CardView : MonoBehaviour, IInputDetector
         foreach (var card in Card.ParentStack.Cards){
             if (card.IndexInStack >= Card.IndexInStack){
                 _cardGroup.Add(card.CardView);
-
             }
+        }
+
+        // 检测自己是否是堆的底部
+        if (Card.IndexInStack != 1){
+            SplitStack();
         }
     }    
     
@@ -83,18 +86,19 @@ public class CardView : MonoBehaviour, IInputDetector
     public void OnDragEnd()
     {
         _isDragging = false;
-        Debug.Log($"OnDragEnd: {Card.GuidPrefix}");
+        // Debug.Log($"OnDragEnd: {Card.GuidPrefix}");
 
         // 检测鼠标位置是否与另一个卡牌碰撞
         Vector3 mousePosition = Input.mousePosition;
         mousePosition.z = - Camera.main.transform.position.z;
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
         Collider2D[] colliders = Physics2D.OverlapPointAll(worldPosition);
+
         foreach (var collider in colliders)
         {
             if (collider.gameObject == gameObject) continue;
             if (collider.gameObject.CompareTag("Card")){
-                bool merged = TestManager.Instance.stackSystem.TryMerge(collider.gameObject.GetComponent<CardView>().Card, Card);
+                bool merged = StackSystem.instance.TryMerge(collider.gameObject.GetComponent<CardView>().Card, Card);
                 if (merged){
                     Debug.Log("合并成功");
                 }
@@ -103,13 +107,19 @@ public class CardView : MonoBehaviour, IInputDetector
                 }
             }
         }
+
+        //清除_cardGroup
+        _cardGroup.Clear();
     }
     private void SplitStack(){
+        List<Card> cards = new();
         foreach (var card in Card.ParentStack.Cards){
+            // 移动到新堆            
             if (card.IndexInStack >= Card.IndexInStack){
-                card.CardView.transform.SetParent(null);
+                cards.Add(card);
             }
         }
+        StackSystem.instance.CreateNewStack(cards);
     }
     private void OnCardDestroy()
     {

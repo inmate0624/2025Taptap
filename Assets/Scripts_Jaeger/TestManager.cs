@@ -8,9 +8,9 @@ public class TestManager : MonoBehaviour
     private static TestManager _instance;
     public static TestManager Instance;
 
-    public StackSystem stackSystem;
-    public CardEventSystem recipeSystem;
-    public CardSystem cardSystem;
+    // public StackSystem stackSystem;
+    // public CardEventSystem recipeSystem;
+    // public CardSystem cardSystem;
 
     CardView _draggingCardView;
     private void Awake()
@@ -24,9 +24,9 @@ public class TestManager : MonoBehaviour
         {
             Destroy(this);
         }
-        cardSystem = new();
-        recipeSystem = new(cardSystem);
-        stackSystem = new(recipeSystem, cardSystem);
+        // cardSystem = new();
+        // recipeSystem = new(cardSystem);
+        // stackSystem = new(recipeSystem, cardSystem);
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]

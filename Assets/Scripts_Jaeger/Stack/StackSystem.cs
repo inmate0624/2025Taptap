@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Base;
 using UnityEngine;
 
 public interface IStackSystem
@@ -11,22 +12,20 @@ public interface IStackSystem
 }
 
 
-public class StackSystem : IStackSystem
+public class StackSystem : SingletonBase<StackSystem>, IStackSystem
 {
-    private readonly CardEventSystem _recipeSystem;
-    private readonly CardSystem _cardSystem;
+
     private const float _offset = 1f;
     private static int _stackId = 0;
     public static int StackId => _stackId++;
     public static void ResetStackId() => _stackId = 0;
     public const float STACK_OFFSET = -0.8f;
-    public StackSystem(CardEventSystem recipeSystem, CardSystem cardSystem)
-    {
-        _recipeSystem = recipeSystem;
-        _cardSystem = cardSystem;
 
+    void Start()
+    {
         EventBus.Subscribe<StackChangeEvent>(UpdateStackView);
     }
+
     public bool TryMerge(Card target, Card input) => TryMerge(target.ParentStack, input.ParentStack);
     public bool TryMerge(Stack target, Card input) => TryMerge(target, input.ParentStack);
     public bool TryMerge(Stack A_Stack, Stack B_Stack)
@@ -50,13 +49,12 @@ public class StackSystem : IStackSystem
         foreach (var card in B_Stack.Cards) combined.Add(card);
 
 
-        Recipe recipe = _recipeSystem.FindMatch(combined, out List<Card> matchedCards);
+        Recipe recipe = CardEventSystem.instance.FindMatch(combined, out List<Card> matchedCards);
         if (recipe != null)
         {
             List<Card> inputCards = new();
             inputCards.AddRange(matchedCards.ToList());
-            _recipeSystem.ExecuteRecipe(recipe, inputCards, out List<Card> outputCards);
-            
+            CardEventSystem.instance.ExecuteRecipe(recipe, inputCards, A_Stack.Top.CardView.transform.position, out List<Card> outputCards);
             return true;
         }
 
@@ -76,11 +74,10 @@ public class StackSystem : IStackSystem
         foreach (var card in evt.Stack.Cards)
         {
             card.CardView.transform.position = new Vector3(position.x, position.y + offset, position.z);
-            offset -= StackSystem.STACK_OFFSET;
+            offset += StackSystem.STACK_OFFSET;
         }
     }
-
-    public void CreateNewStack(List<Card> cards)
+    public Stack CreateNewStack(List<Card> cards)
     {
         var stack = new Stack();
         var _stackPrefab = Resources.Load<GameObject>("Stack");
@@ -92,5 +89,6 @@ public class StackSystem : IStackSystem
             stack.AddCard(card);
         }
         stackView.RefreshBounds();
+        return stack;
     }
 }
