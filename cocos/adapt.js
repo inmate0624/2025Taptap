@@ -1,6 +1,7 @@
 var e = require;
 var t = module;
 var a = exports;
+
 var o, i = this && this.__extends || (o = function(e, t) {
     return (o = Object.setPrototypeOf || {
         __proto__: []
@@ -13,6 +14,7 @@ var o, i = this && this.__extends || (o = function(e, t) {
         for (var a in t) Object.prototype.hasOwnProperty.call(t, a) && (e[a] = t[a])
     })(e, t)
 },
+
 function(e, t) {
     function a() {
         this.constructor = e
@@ -20,6 +22,7 @@ function(e, t) {
     o(e, t),
     e.prototype = null === t ? Object.create(t) : (a.prototype = t.prototype, new a)
 }),
+
 n = this && this.__decorate ||
 function(e, t, a, o) {
     var i, n = arguments.length,
@@ -29,9 +32,11 @@ function(e, t, a, o) {
     return n > 3 && r && Object.defineProperty(t, a, r),
     r
 };
+
 Object.defineProperty(a, "__esModule", {
     value: !0
 });
+
 var r = cc._decorator,
 c = r.ccclass,
 s = (r.property,
@@ -44,4 +49,5 @@ function(e) {
     t.prototype.start = function() {},
     n([c], t)
 } (cc.Component));
+
 a.default = s
