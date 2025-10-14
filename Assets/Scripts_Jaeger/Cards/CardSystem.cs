@@ -16,6 +16,10 @@ public class CardSystem : SingletonBase<CardSystem>
     public List<CardData> CardDataList => DataManager.GetAllCardData();
     public int MaxCardCount {get; private set;} = 10;
     public int CurrentCardCount {get; private set;} = 0;
+    /// <summary>
+    /// 拖拽信息记录板
+    /// </summary>
+    public DraggingCardBoard DraggingCardBoard {get; private set;} = new();
     private string NameToId(string name) => CardDataList.Find(data => data.Name == name).ID;
     public Card CreateCardByName(string name, Vector2 position) => CreateCardById(NameToId(name), position);
     public Card CreateCardById(string id, Vector2 position)
@@ -65,19 +69,17 @@ public class CardSystem : SingletonBase<CardSystem>
         }
         Debug.Log("-----展示完毕-----");
     }
-
     public void ChangeMaxCardCount(int count){
         MaxCardCount = count;
         EventBus.Publish(new CardAmountChangeEvent(MaxCardCount, CurrentCardCount));
     }
 }
 
-
-public class CardAmountChangeEvent{
-    public int MaxCardCount {get; private set;}
-    public int CurrentCardCount {get; private set;}
-    public CardAmountChangeEvent(int maxCardCount, int currentCardCount){
-        MaxCardCount = maxCardCount;
-        CurrentCardCount = currentCardCount;
-    }
+/// <summary>
+/// 记录当前卡牌拖拽信息
+/// </summary>
+public class DraggingCardBoard{
+    public List<Card> Cards {get; private set;} = new();
+    public void SetCards(List<Card> cards) => Cards = cards;
+    public void ClearCards() => Cards.Clear();
 }

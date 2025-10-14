@@ -8,13 +8,15 @@ using UnityEngine;
 
 
 /// <summary>
-/// 商店系统：购买卡包卡，双击打开后掉落卡
+/// 商店系统：管理购买区域的生成
 /// </summary>
 public class ShopSystem: MonoBehaviour
 {
     public Dictionary<string, CardData> packCardList = new();
     private ISpawnPositionStrategy _spawnStrategy;
     public Transform shopAreaParent;
+
+
     void Awake()
     {
         // 策略选择（后续可改为可注册工厂）
@@ -23,8 +25,28 @@ public class ShopSystem: MonoBehaviour
     void Start()
     {
         RegisterPackCard();
+        CreateShopArea(packCardList.Values.ToList());
     }
-
+    void Update()
+    {
+        // 松开鼠标
+        DetectShopArea();
+    }
+    private void DetectShopArea(){
+        // 当鼠标放手时检测商店区域
+        if (Input.GetMouseButtonUp(0)){
+            // 检测鼠标是否命中商店区域
+            List<RaycastHit2D> hits = Physics2D.RaycastAll(Utility.GetMousePosition(), Vector2.zero).ToList();
+            hits.RemoveAll(h => h.collider.gameObject.layer != LayerMask.NameToLayer("ShopArea"));
+            if (hits.Count > 0){
+                Debug.Log("命中商店区域");
+                ShopArea shopArea = hits[0].collider.GetComponent<ShopArea>();
+                if (shopArea != null){
+                    shopArea.OnPointerUp();
+                }
+            }
+        }
+    }
     private void RegisterPackCard(){
         DataManager.GetAllCardData()
             .Where(d => d.Type == cfg.CardType.卡包)
@@ -32,35 +54,26 @@ public class ShopSystem: MonoBehaviour
             .ForEach(d => packCardList.Add(d.ID, d));
     }
 
-    private void CreateShopArea(){
-        GameObject shopAreaPrefab = Resources.Load<GameObject>("ShopArea");
-        ShopArea shopArea = GameObject.Instantiate(shopAreaPrefab, Vector3.zero, Quaternion.identity).GetComponent<ShopArea>();
-        shopArea.transform.position = Vector3.zero;
-        shopArea.transform.SetParent(shopAreaParent);
+    /// <summary>
+    /// 创建一个商店区域
+    /// </summary>
+    private void CreateShopArea(List<CardData> cardDataList){
+        cardDataList.Sort((a, b) => a.Price.CompareTo(b.Price));
+
+        List<ShopArea> shopAreaList = new();
+
+        foreach (var cardData in cardDataList)
+        {
+            // 加载商店区域预制体
+            GameObject shopAreaPrefab = Resources.Load<GameObject>("购买区域");
+            ShopArea shopArea = GameObject.Instantiate(shopAreaPrefab, Vector3.zero, Quaternion.identity).GetComponent<ShopArea>();
+            shopArea.transform.position = Vector3.zero;
+            shopArea.Init(cardData);
+            // 放置在父节点下排列
+            shopArea.transform.SetParent(shopAreaParent);
+            shopAreaList.Add(shopArea);
+        }
     }
 
-    // // 购买流程由 ShopArea 完成；此处保留开包逻辑与定义
-    // private void OnPackDoubleClick(Card packCard)
-    // {
-    //     if (packCard == null) return;
-    //     if (!packCardList.ContainsKey(packCard.Id)) return;
 
-    //     // 只允许独立卡牌触发（防御性检查）
-    //     if (packCard.ParentStack == null || packCard.ParentStack.Cards.Count != 1) return;
-
-    //     var center = (Vector2)packCard.CardView.transform.position;
-    //     var positions = _spawnStrategy.GetSpawnPositions(center, packCardList[packCard.Id].dropCount);
-
-    //     // 生成掉落
-    //     for (int i = 0; i < def.dropCount; i++)
-    //     {
-    //         var pickId = def.poolCardIds[UnityEngine.Random.Range(0, def.poolCardIds.Count)];
-    //         CardSystem.instance.CreateCardById(pickId, positions[i]);
-    //     }
-
-    //     // 销毁包卡
-    //     CardSystem.instance.DestroyCard(packCard);
-
-    //     EventBus.Publish(new CardPackOpenedEvent(def.packId));
-    // }
 }

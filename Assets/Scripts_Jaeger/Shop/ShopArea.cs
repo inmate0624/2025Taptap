@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using cfg;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -15,6 +16,11 @@ public class ShopArea : MonoBehaviour
     public int price = 0;
     [Tooltip("卡包生成位置（为空默认用本节点位置）")]
     public Transform spawnPoint;
+
+    [SerializeField]
+    private TextMeshPro _priceText;
+    [SerializeField]
+    private TextMeshPro _packIdText;
     private CardData _cardData;
     void Start()
     {
@@ -40,28 +46,32 @@ public class ShopArea : MonoBehaviour
         _cardData = cardData;  
         price = cardData.Price;
         packId = cardData.ID;
+
+        _priceText.text = price.ToString();
+        _packIdText.text = packId;
     }
 
+    public void OnPointerUp()
+    {
+        if (CardSystem.instance.DraggingCardBoard.Cards.Count <= 0) return;
+        if (CardSystem.instance.DraggingCardBoard.Cards.Count < price) return;
+        if (!CardSystem.instance.DraggingCardBoard.Cards.All(c => c.DataType == cfg.CardType.金币)) return;
+    
+        // 消耗金币
+        foreach (var c in CardSystem.instance.DraggingCardBoard.Cards)
+        {
+            CardSystem.instance.DestroyCard(c);
+        }
 
+        // 生成卡包卡
+        GeneratePackCard();
+    }
 
-    // private void OnStackChanged()
-    // {
-    //     if (_stack == null) return;
-    //     // 仅金币卡且数量恰好等于 price
-    //     var cards = _stack.Cards.ToList();
-    //     if (cards.Count != price) return;
-    //     if (!cards.All(c => c.DataType == cfg.CardType.金币)) return;
+    private void GeneratePackCard(){
+        var pos = spawnPoint != null ? (Vector2)spawnPoint.position : (Vector2)transform.position;
+        CardSystem.instance.CreateCardById(packId, pos);
+    }
 
-    //     // 消耗金币
-    //     foreach (var c in cards)
-    //     {
-    //         CardSystem.instance.DestroyCard(c);
-    //     }
-
-    //     // 生成卡包卡
-    //     var pos = spawnPoint != null ? (Vector2)spawnPoint.position : (Vector2)transform.position;
-    //     CardSystem.instance.CreateCardById(packId, pos);
-    // }
 }
 
 
