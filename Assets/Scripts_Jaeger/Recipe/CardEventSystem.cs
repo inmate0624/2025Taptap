@@ -57,7 +57,7 @@ public class CardEventSystem : SingletonBase<CardEventSystem>
         matchedCards = new();
         Recipe recipe = _recipes.FirstOrDefault(r => r.Matches(ids));
         if (recipe == null) return null;
-        foreach (var id in recipe.Inputs)
+        foreach (var id in recipe.InputIds)
         {
             var currentFind = cards.FirstOrDefault(c => c.Id == id);
             if (currentFind != null){
@@ -82,7 +82,7 @@ public class CardEventSystem : SingletonBase<CardEventSystem>
         stack.ClearDirty();
         activeProcesses.Add(process);
         
-        Debug.Log($"开始合成{recipe.Outputs}");
+        Debug.Log($"开始合成{recipe.OutputIds}");
     }
 
     /// <summary>

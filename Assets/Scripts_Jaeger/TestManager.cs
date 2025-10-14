@@ -23,6 +23,7 @@ public class TestManager : MonoBehaviour
             Destroy(this);
         }
 
+        DataManager.GenerateData();
     }
 
     void Start()
@@ -64,9 +65,9 @@ public class TestManager : MonoBehaviour
 
     private void TestInit(){
         // 注册配方：Wood + Stone → Campfire
-        CardEventSystem.instance.RegisterRecipe(new Recipe("r1", new[] { "wood", "stone" }, new []{"campfire"}, 1f));
-        CardSystem.instance.CreateCardById("wood", Vector2.zero);
-        CardSystem.instance.CreateCardById("stone", Vector2.zero);  
+        CardEventSystem.instance.RegisterRecipe(new Recipe("r1", new[] { "wood", "fruit" }, new []{"stone"}, 1f));
+        CardSystem.instance.RandomCreateCard(Vector2.zero);
+        CardSystem.instance.RandomCreateCard(Vector2.zero);  
     }
 
     private void TestInput(){
@@ -74,11 +75,11 @@ public class TestManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1)) 
             {
-                CardSystem.instance.CreateCardById("wood", Vector2.zero);
+                CardSystem.instance.RandomCreateCard(Vector2.zero);
             }
             if (Input.GetKeyDown(KeyCode.Alpha2)) 
             {
-                CardSystem.instance.CreateCardById("stone", Vector2.zero);
+                CardSystem.instance.CreateCardByName("树莓", Vector2.zero);
             }
         }
 

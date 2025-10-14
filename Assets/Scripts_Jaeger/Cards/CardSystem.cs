@@ -34,7 +34,7 @@ public class CardSystem : SingletonBase<CardSystem>
         _cards.Add(card.Guid, card);
         return card;
     }
-
+    public Card RandomCreateCard(Vector2 position) => CreateCardById(CardDataList[Random.Range(0, CardDataList.Count)].ID, position);
     public void DestroyCard(Card card)
     {
         _cards.Remove(card.Guid);
