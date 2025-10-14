@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  - {fileID: -1452534087663859313, guid: 7a7e5c5ae5a90cf4c97f2032be285d46, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -102,10 +102,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 124
+  m_text: "\u5361\u540D"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7a7e5c5ae5a90cf4c97f2032be285d46, type: 2}
+  m_sharedMaterial: {fileID: -1452534087663859313, guid: 7a7e5c5ae5a90cf4c97f2032be285d46, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -665,6 +665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b57ecb9e0dbb09b45914d340f4866222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsDragging: 0
 --- !u!61 &2515943847207287955
 BoxCollider2D:
   m_ObjectHideFlags: 0

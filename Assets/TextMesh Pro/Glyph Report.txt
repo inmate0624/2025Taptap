@@ -1,15 +1,14 @@
 Font: Aa???????  Style: Regular
-Point Size: 96   Padding: 3   SP/PD Ratio: 3.1%
+Point Size: 1515   Padding: 3   SP/PD Ratio: 0.2%
 
-Characters included: 7104/7106
+Characters included: 97/99
 Missing characters: 2
 Excluded characters: 0
 
 Characters missing from font file:
 ----------------------------------------
-ID: 9	Hex: 9	Char [	]
-ID: 10	Hex: A	Char [
-]
+ID: 160	Hex: A0	Char [ ]
+ID: 8203	Hex: 200B	Char [​]
 
 Characters excluded from packing:
 ----------------------------------------
