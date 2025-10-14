@@ -12,11 +12,34 @@ public class CardEventSystem : SingletonBase<CardEventSystem>
 {
     private readonly List<Recipe> _recipes = new();
     private List<RecipeProcess> activeProcesses = new();
+    // 点击事件路由
+    private readonly Dictionary<string, System.Action<Card>> _clickHandlers = new();
+    private readonly Dictionary<string, System.Action<Card>> _doubleClickHandlers = new();
     /// <summary>
     /// 注册配方
     /// </summary>
     /// <param name="recipe"> 配方 </param>
     public void RegisterRecipe(Recipe recipe) => _recipes.Add(recipe);
+    public void RegisterClickHandler(string cardId, System.Action<Card> handler)
+    {
+        if (string.IsNullOrEmpty(cardId) || handler == null) return;
+        _clickHandlers[cardId] = handler;
+    }
+    public void RegisterDoubleClickHandler(string cardId, System.Action<Card> handler)
+    {
+        if (string.IsNullOrEmpty(cardId) || handler == null) return;
+        _doubleClickHandlers[cardId] = handler;
+    }
+    public void TriggerClick(Card card)
+    {
+        if (card == null) return;
+        if (_clickHandlers.TryGetValue(card.Id, out var handler)) handler?.Invoke(card);
+    }
+    public void TriggerDoubleClick(Card card)
+    {
+        if (card == null) return;
+        if (_doubleClickHandlers.TryGetValue(card.Id, out var handler)) handler?.Invoke(card);
+    }
     void Update()
     {
         for (int i = activeProcesses.Count - 1; i >= 0; i--)

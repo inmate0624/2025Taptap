@@ -18,6 +18,6 @@ public class CardAmountUI : MonoBehaviour
     }
     void OnCardAmountChange(CardAmountChangeEvent evt)
     {
-        _text.text = evt.CurrentCardCount.ToString() + "/" + evt.MaxCardCount.ToString();
+        _text.text = "CardAmount: " + evt.CurrentCardCount.ToString() + "/" + evt.MaxCardCount.ToString();
     }
 }

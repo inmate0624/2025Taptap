@@ -1,14 +1,32 @@
 [
   {
-    "ID": "1",
-    "name": "树莓"
+    "ID": "fruit",
+    "name": "树莓",
+    "type": 1,
+    "price": 2
   },
   {
-    "ID": "2",
-    "name": "木头"
+    "ID": "wood",
+    "name": "木头",
+    "type": 1,
+    "price": 3
   },
   {
-    "ID": "3",
-    "name": "石头"
+    "ID": "stone",
+    "name": "石头",
+    "type": 1,
+    "price": 4
+  },
+  {
+    "ID": "coin",
+    "name": "金币",
+    "type": 2,
+    "price": 0
+  },
+  {
+    "ID": "pack_basic",
+    "name": "基础卡包",
+    "type": 3,
+    "price": 5
   }
 ]
