@@ -11,7 +11,9 @@ public class Card
 
     public string Id { get; private set; }
     public string Name { get; private set; }
-    public CardType Type { get; private set; }
+    // 来自数据表
+    public cfg.CardType DataType { get; private set; }
+    public int Price { get; private set; }
     public bool IsStackable { get; private set; }
 
     // Runtime
@@ -29,7 +31,8 @@ public class Card
         Guid = System.Guid.NewGuid().ToString();
         Id = cardData.ID;
         Name = cardData.Name;
-        Type = CardType.Resource;
+        DataType = cardData.Type;
+        Price = cardData.Price;
         IsStackable = true;
     }
 

@@ -15,16 +15,22 @@ namespace cfg
 public partial class Tables
 {
     public CardDataTable CardDataTable {get; }
+    public RecipeDataTable RecipeDataTable {get; }
+    public CardEventDataTable CardEventDataTable {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
         CardDataTable = new CardDataTable(loader("carddatatable"));
+        RecipeDataTable = new RecipeDataTable(loader("recipedatatable"));
+        CardEventDataTable = new CardEventDataTable(loader("cardeventdatatable"));
         ResolveRef();
     }
     
     private void ResolveRef()
     {
         CardDataTable.ResolveRef(this);
+        RecipeDataTable.ResolveRef(this);
+        CardEventDataTable.ResolveRef(this);
     }
 }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -78,6 +79,9 @@ public class CardView : MonoBehaviour, IInputDetector
         if (Card.IndexInStack != 1){
             SplitStack();
         }
+
+        // 设置拖拽中的卡牌列表
+        CardSystem.instance.DraggingCardBoard.SetCards(_cardGroup.Select(c => c.Card).ToList());
     }    
     public void OnDrag()
     {
@@ -94,10 +98,11 @@ public class CardView : MonoBehaviour, IInputDetector
     public void OnDragEnd()
     {
         IsDragging = false;
-
-
         MergeCard();
 
+        // 清除拖拽信息记录板
+        CardSystem.instance.DraggingCardBoard.ClearCards();
+        
         //清除_cardGroup
         _cardGroup.Clear();
 
@@ -165,3 +170,4 @@ public class CardView : MonoBehaviour, IInputDetector
         Debug.Log("OnHold");
     }
 }
+

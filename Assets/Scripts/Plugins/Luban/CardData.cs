@@ -19,6 +19,8 @@ public sealed partial class CardData : Luban.BeanBase
     {
         { if(!_buf["ID"].IsString) { throw new SerializationException(); }  ID = _buf["ID"]; }
         { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
+        { if(!_buf["type"].IsNumber) { throw new SerializationException(); }  Type = (CardType)_buf["type"].AsInt; }
+        { if(!_buf["price"].IsNumber) { throw new SerializationException(); }  Price = _buf["price"]; }
     }
 
     public static CardData DeserializeCardData(JSONNode _buf)
@@ -34,6 +36,14 @@ public sealed partial class CardData : Luban.BeanBase
     /// 卡牌名称
     /// </summary>
     public readonly string Name;
+    /// <summary>
+    /// 卡牌类型
+    /// </summary>
+    public readonly CardType Type;
+    /// <summary>
+    /// 价格（购买和卖出）
+    /// </summary>
+    public readonly int Price;
    
     public const int __ID__ = 55917306;
     public override int GetTypeId() => __ID__;
@@ -47,6 +57,8 @@ public sealed partial class CardData : Luban.BeanBase
         return "{ "
         + "ID:" + ID + ","
         + "name:" + Name + ","
+        + "type:" + Type + ","
+        + "price:" + Price + ","
         + "}";
     }
 }
