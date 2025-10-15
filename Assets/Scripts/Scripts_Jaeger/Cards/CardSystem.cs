@@ -81,5 +81,6 @@ public class CardSystem : SingletonBase<CardSystem>
 public class DraggingCardBoard{
     public List<Card> Cards {get; private set;} = new();
     public void SetCards(List<Card> cards) => Cards = cards;
+    // 清除要延迟
     public void ClearCards() => Cards.Clear();
 }

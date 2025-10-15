@@ -47,11 +47,11 @@ public class StackSystem : SingletonBase<StackSystem>, IStackSystem
         foreach (var card in input_Stack.Cards) combined.Add(card);
 
 
-        Recipe recipe = CardEventSystem.instance.FindMatch(combined, out List<Card> matchedCards);
+        Recipe recipe = RecipeSystem.instance.FindMatch(combined, out List<Card> matchedCards);
         if (recipe != null)
         {
             target_Stack.AddStack(input_Stack);
-            CardEventSystem.instance.StartProcess(target_Stack, recipe);
+            RecipeSystem.instance.StartProcess(target_Stack, recipe);
             return true;
         }
 

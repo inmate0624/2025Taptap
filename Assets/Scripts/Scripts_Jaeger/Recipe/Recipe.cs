@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using cfg;
 using UnityEngine;
 
 /// <summary>
@@ -8,19 +9,21 @@ using UnityEngine;
 public class Recipe
 {
     public string Id { get; }
+    public string Description { get; }
     public List<string> InputIds { get; }
-    public List<string> OutputIds { get; }
+    public List<string> UsedCardIds { get; }
+    public List<CardAction> Actions { get; }
+    public bool IsStrict { get; }
     public float WorkTime { get; }
-    public IGetUsedCard GetUsedCard { get; private set; }
-    public IGenerateCard GetGenerateCard { get; private set; }
-    public Recipe(string id, IEnumerable<string> inputs, IEnumerable<string> outputs, float workTime)
+    public Recipe(RecipeData recipeData)
     {
-        Id = id;
-        InputIds = inputs.ToList();
-        OutputIds = outputs.ToList();
-        WorkTime = workTime;
-
-        InitStrategy();
+        Id = recipeData.ID;
+        Description = recipeData.Description;
+        InputIds = recipeData.InputList.ToList();
+        UsedCardIds = recipeData.UsedCardList.ToList();
+        Actions = recipeData.Actions.ToList();
+        IsStrict = recipeData.IsStrict;
+        WorkTime = recipeData.WorkTime;
     }
 
     public bool Matches(IEnumerable<string> cardIds)
@@ -31,12 +34,5 @@ public class Recipe
         for (int i = 0; i < a.Count; i++)
             if (a[i] != b[i]) return false;
         return true;
-    }
-
-    // 根据配方类型初始化策略
-    private void InitStrategy()
-    {
-        GetUsedCard = new GetUsedCard_所有卡牌();
-        GetGenerateCard = new GenerateCard_默认();
     }
 }

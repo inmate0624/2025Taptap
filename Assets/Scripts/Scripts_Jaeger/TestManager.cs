@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 public class TestManager : MonoBehaviour
@@ -65,7 +66,6 @@ public class TestManager : MonoBehaviour
 
     private void TestInit(){
         // 注册配方：Wood + Stone → Campfire
-        CardEventSystem.instance.RegisterRecipe(new Recipe("r1", new[] { "wood", "fruit" }, new []{"stone"}, 1f));
         CardSystem.instance.RandomCreateCard(Vector2.zero);
         CardSystem.instance.RandomCreateCard(Vector2.zero);  
     }
@@ -79,12 +79,27 @@ public class TestManager : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Alpha2)) 
             {
-                CardSystem.instance.CreateCardByName("树莓", Vector2.zero);
+                CardSystem.instance.CreateCardByName("金币", Vector2.zero);
             }
         }
 
         if (Input.GetKeyDown(KeyCode.S)){
             CardSystem.instance.ShowAllCards();
+        }
+    }
+
+    void OnGUI() 
+    {
+        //显示拖拽信息
+        if (CardSystem.instance.DraggingCardBoard.Cards.Count > 0)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var card in CardSystem.instance.DraggingCardBoard.Cards)
+            {
+                sb.Append(card.Name + " ");
+            }
+            // 字体为黑色
+            GUILayout.Label("拖拽卡牌: " + sb.ToString(), new GUIStyle{normal = new GUIStyleState{textColor = Color.black}});
         }
     }
 }

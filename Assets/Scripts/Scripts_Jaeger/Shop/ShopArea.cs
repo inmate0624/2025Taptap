@@ -53,6 +53,7 @@ public class ShopArea : MonoBehaviour
 
     public void OnPointerUp()
     {
+        Debug.Log(CardSystem.instance.DraggingCardBoard.Cards.Count);
         if (CardSystem.instance.DraggingCardBoard.Cards.Count <= 0) return;
         if (CardSystem.instance.DraggingCardBoard.Cards.Count < price) return;
         if (!CardSystem.instance.DraggingCardBoard.Cards.All(c => c.DataType == cfg.CardType.金币)) return;

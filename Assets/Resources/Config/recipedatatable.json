@@ -1,7 +1,12 @@
 [
   {
     "ID": "1",
+    "description": "木头+树莓 = 石头",
     "inputList": [
+      "wood",
+      "fruit"
+    ],
+    "usedCardList": [
       "wood",
       "fruit"
     ],

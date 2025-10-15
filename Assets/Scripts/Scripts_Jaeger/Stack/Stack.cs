@@ -11,7 +11,7 @@ public class Stack
     public readonly string Guid;
     public readonly string Id;
     private readonly List<Card> _cards = new List<Card>();
-    public IReadOnlyList<Card> Cards => _cards;
+    public List<Card> Cards => _cards;
 
     public StackView StackView { get; set; }
     // 堆销毁
