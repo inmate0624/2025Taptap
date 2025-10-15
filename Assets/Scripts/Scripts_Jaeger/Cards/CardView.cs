@@ -16,6 +16,9 @@ public class CardView : MonoBehaviour, IInputDetector
     private List<CardView> _cardGroup = new();
     private Vector3 _dragOffset;
     private StackView _stackView => Card.ParentStack.StackView;
+
+    public TMP_FontAsset FontAsset;
+    
     void Awake()
     {
         _nameText = GetComponentInChildren<TextMeshPro>();
@@ -32,6 +35,14 @@ public class CardView : MonoBehaviour, IInputDetector
         card.CardView = this;
         Card = card;
         _nameText.text = card.Name;
+
+        //为卡牌视图设置字体资产
+        if (FontAsset is not null)
+        {
+            _nameText.font = FontAsset;
+            _GuidText.font = FontAsset;
+            _StackText.font = FontAsset;
+        }
         
         Card.OnDestroy += OnCardDestroy;
         Card.OnStackChange += OnStackChange;

@@ -665,6 +665,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b57ecb9e0dbb09b45914d340f4866222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsDragging: 0
+  FontAsset: {fileID: 11400000, guid: 26e3a3929d6c2244eb640ea41616dc75, type: 2}
 --- !u!61 &2515943847207287955
 BoxCollider2D:
   m_ObjectHideFlags: 0
