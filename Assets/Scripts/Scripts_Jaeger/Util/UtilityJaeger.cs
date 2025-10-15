@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-public static class Utility
+public static class UtilityJaeger
 {
     public static Vector3 GetMousePosition()
     {
