@@ -1224,6 +1224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spacing: 1
+  dirty: 0
 --- !u!1 &1721288656
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,21 @@
+[
+  {
+    "ID": "1",
+    "inputList": [
+      "wood",
+      "fruit"
+    ],
+    "isStrict": false,
+    "workTime": 1,
+    "actions": [
+      {
+        "$type": "CA_生成卡牌",
+        "targetIds": [
+          "stone"
+        ],
+        "isRandom": false,
+        "amount": 1
+      }
+    ]
+  }
+]
