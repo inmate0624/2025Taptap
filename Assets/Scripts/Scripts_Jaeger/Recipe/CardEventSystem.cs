@@ -1,28 +1,36 @@
 using Base;
+using cfg;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class CardEventSystem : SingletonBase<CardEventSystem>{
 
-    private readonly Dictionary<string, System.Action<Card>> _clickHandlers = new();
-    private readonly Dictionary<string, System.Action<Card>> _doubleClickHandlers = new();
-        public void RegisterClickHandler(string cardId, System.Action<Card> handler)
+    // 本质上是注册规则，根据规则触发事件
+    private readonly Dictionary<string, CardEventData> _doubleClickHandlers = new();
+    void Start()
     {
-        if (string.IsNullOrEmpty(cardId) || handler == null) return;
-        _clickHandlers[cardId] = handler;
+        DataManager.GetAllCardEventData().ForEach(eventData => RegisterCardEvent(eventData));
     }
-    public void RegisterDoubleClickHandler(string cardId, System.Action<Card> handler)
+    public void RegisterCardEvent(CardEventData eventData)
     {
-        if (string.IsNullOrEmpty(cardId) || handler == null) return;
-        _doubleClickHandlers[cardId] = handler;
-    }
-    public void TriggerClick(Card card)
-    {
-        if (card == null) return;
-        if (_clickHandlers.TryGetValue(card.Id, out var handler)) handler?.Invoke(card);
+        if (string.IsNullOrEmpty(eventData.CardId) || eventData == null) return;
+        Debug.Log($"注册事件：{eventData.CardId}-{eventData.TriggerType}");
+        switch (eventData.TriggerType){
+            case CardEventType.双击:
+                _doubleClickHandlers[eventData.CardId] = eventData;
+                break;
+            default:
+                break;
+        }
     }
     public void TriggerDoubleClick(Card card)
     {
+        Debug.Log($"触发双击{card.Name}-{card.GuidPrefix}");
         if (card == null) return;
-        if (_doubleClickHandlers.TryGetValue(card.Id, out var handler)) handler?.Invoke(card);
+        if (_doubleClickHandlers.TryGetValue(card.Id, out var handler)){
+            foreach (var action in handler.Actions){
+                CardActionSystem.instance.ExecuteCardAction(action, new List<Card>{card});
+            }
+        }
     }
 }

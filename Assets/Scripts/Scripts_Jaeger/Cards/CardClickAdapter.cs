@@ -51,7 +51,7 @@ public class CardClickAdapter : MonoBehaviour
             {
                 // 单击（延迟留给可能的第二击，这里直接触发即可，复杂需求可做协程延迟）
                 _lastClickTime = t;
-                CardEventSystem.instance.TriggerClick(_cardView.Card);
+                // CardEventSystem.instance.TriggerClick(_cardView.Card);
             }
         }
     }

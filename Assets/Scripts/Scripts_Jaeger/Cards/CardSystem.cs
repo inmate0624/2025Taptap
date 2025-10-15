@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Base;
 using cfg;
+using UniRx;
 using UnityEngine;
 
 
@@ -48,6 +49,7 @@ public class CardSystem : SingletonBase<CardSystem>
 
         // 发布卡牌数量变化事件
         EventBus.Publish(new CardAmountChangeEvent(MaxCardCount, CurrentCardCount));
+        EventBus.Publish(new AddCardEvent(card));
         return card;
     }
     public Card RandomCreateCard(Vector2 position) => CreateCardById(CardDataList[Random.Range(0, CardDataList.Count)].ID, position);
@@ -57,6 +59,7 @@ public class CardSystem : SingletonBase<CardSystem>
         card.Destroy();
         CurrentCardCount--;
         EventBus.Publish(new CardAmountChangeEvent(MaxCardCount, CurrentCardCount));
+        EventBus.Publish(new RemoveCardEvent(card));
     }
     public Card GetCard(string Guid) => _cards[Guid];
     public IEnumerable<Card> AllCards => _cards.Values;
@@ -82,5 +85,9 @@ public class DraggingCardBoard{
     public List<Card> Cards {get; private set;} = new();
     public void SetCards(List<Card> cards) => Cards = cards;
     // 清除要延迟
-    public void ClearCards() => Cards.Clear();
+    public void ClearCards(){
+        Observable.NextFrame().Subscribe((_) => {
+            Cards.Clear();
+        });
+    }
 }

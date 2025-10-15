@@ -50,12 +50,3 @@ public class Card
 
     public string GuidPrefix => Guid.Substring(0, 6);
 }
-
-public enum CardType
-{
-    Resource,
-    Building,
-    Human,
-    Enemy,
-    Other
-}

@@ -82,10 +82,6 @@ public class TestManager : MonoBehaviour
                 CardSystem.instance.CreateCardByName("金币", Vector2.zero);
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.S)){
-            CardSystem.instance.ShowAllCards();
-        }
     }
 
     void OnGUI() 

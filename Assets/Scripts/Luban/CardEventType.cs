@@ -13,7 +13,6 @@ namespace cfg
 { 
     public enum CardEventType
     {
-        单击 = 1,
         双击 = 2,
     }
 

@@ -1,1 +1,23 @@
-[]
+[
+  {
+    "ID": "1",
+    "description": "基础卡包双击打开",
+    "cardId": "pack_basic",
+    "triggerType": 2,
+    "actions": [
+      {
+        "$type": "CA_销毁自身"
+      },
+      {
+        "$type": "CA_生成卡牌",
+        "targetIds": [
+          "wood",
+          "fruit",
+          "stone"
+        ],
+        "isRandom": false,
+        "amount": 1
+      }
+    ]
+  }
+]
