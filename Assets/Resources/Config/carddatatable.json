@@ -28,5 +28,17 @@
     "name": "基础卡包",
     "type": 3,
     "price": 5
+  },
+  {
+    "ID": "ash",
+    "name": "灰烬",
+    "type": 1,
+    "price": 0
+  },
+  {
+    "ID": "fire",
+    "name": "火堆",
+    "type": 4,
+    "price": 0
   }
 ]

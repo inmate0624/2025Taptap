@@ -28,11 +28,20 @@ public class Recipe
 
     public bool Matches(IEnumerable<string> cardIds)
     {
-        var a = InputIds.OrderBy(x => x).ToList();
-        var b = cardIds.OrderBy(x => x).ToList();
-        if (a.Count != b.Count) return false;
-        for (int i = 0; i < a.Count; i++)
-            if (a[i] != b[i]) return false;
-        return true;
+        if (IsStrict)
+        {
+            // 严格顺序匹配
+            return InputIds.OrderBy(x => x).SequenceEqual(cardIds.OrderBy(x => x));
+        }
+        else{
+            // 非严格顺序匹配（只匹配数量和内容）
+            var a = InputIds.OrderBy(x => x).ToList();
+            var b = cardIds.OrderBy(x => x).ToList();
+            if (a.Count != b.Count) return false;
+            for (int i = 0; i < a.Count; i++)
+                if (a[i] != b[i]) return false;
+            return true;
+        }
+
     }
 }
