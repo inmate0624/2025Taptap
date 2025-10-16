@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Manager;
 
 /// <summary>
 /// 游戏设置管理脚本
@@ -10,6 +11,7 @@ public class Setting : MonoBehaviour
 {
     [Header("设置面板")]
     [SerializeField] private GameObject settingPanel; // 设置面板对象
+    [SerializeField] private Button closeButton; // 关闭设置面板按钮
 
     [Header("音频设置-按钮控制")]
     [SerializeField] private Button bgmToggleButton; // 背景音乐开关按钮
@@ -21,7 +23,6 @@ public class Setting : MonoBehaviour
     [SerializeField] private Toggle fullscreenToggle; // 全屏开关
 
     // 音频管理相关
-    private AudioSource bgmAudioSource;
     private float defaultBgmVolume = 0.7f;
     private float defaultSfxVolume = 1.0f;
     private bool isBgmEnabled = true; // 背景音乐状态
@@ -41,14 +42,6 @@ public class Setting : MonoBehaviour
         if (settingPanel != null)
         {
             settingPanel.SetActive(false);
-        }
-
-        // 获取或添加背景音乐AudioSource
-        bgmAudioSource = GetComponent<AudioSource>();
-        if (bgmAudioSource == null)
-        {
-            bgmAudioSource = gameObject.AddComponent<AudioSource>();
-            bgmAudioSource.loop = true;
         }
 
         // 加载保存的设置
@@ -71,6 +64,9 @@ public class Setting : MonoBehaviour
 
         if (fullscreenToggle != null)
             fullscreenToggle.onValueChanged.AddListener(OnFullscreenToggleChanged);
+
+        if (closeButton != null)
+            closeButton.onClick.AddListener(HideSettingPanel);
     }
 
     /// <summary>
@@ -107,8 +103,7 @@ public class Setting : MonoBehaviour
         PlayerPrefs.SetInt(SFX_ENABLED_KEY, isSfxEnabled ? 1 : 0);
         
         // 保留音量设置，以便将来可能需要
-        float bgmVolume = bgmAudioSource != null ? bgmAudioSource.volume : defaultBgmVolume;
-        PlayerPrefs.SetFloat(BGM_VOLUME_KEY, bgmVolume);
+        float bgmVolume = PlayerPrefs.GetFloat(BGM_VOLUME_KEY, defaultBgmVolume);
         PlayerPrefs.SetFloat(SFX_VOLUME_KEY, defaultSfxVolume);
 
         if (fullscreenToggle != null)
@@ -122,15 +117,24 @@ public class Setting : MonoBehaviour
     /// </summary>
     private void ApplyAudioSettings(bool bgmEnabled, float bgmVolume, bool sfxEnabled, float sfxVolume)
     {
-        // 应用背景音乐设置
-        if (bgmAudioSource != null)
+        // 通过AudioManager应用音频设置
+        AudioManager audioManager = AudioManager.instance;
+        if (audioManager != null)
         {
-            bgmAudioSource.mute = !bgmEnabled;
-            bgmAudioSource.volume = bgmVolume;
+            // 设置背景音乐
+            if (audioManager.currentBGM != null)
+            {
+                audioManager.currentBGM.mute = !bgmEnabled;
+                audioManager.currentBGM.volume = bgmVolume;
+            }
+            
+            // 设置音效
+            if (audioManager.currentEffectMusic != null)
+            {
+                audioManager.currentEffectMusic.mute = !sfxEnabled;
+                audioManager.currentEffectMusic.volume = sfxVolume;
+            }
         }
-
-        // 这里可以添加对全局音效管理器的设置
-        // 例如通过事件通知或直接引用音效管理器
     }
 
     // UI事件处理方法
@@ -162,10 +166,11 @@ public class Setting : MonoBehaviour
         // 更新UI显示
         UpdateAudioStatusUI();
         
-        // 应用设置
-        if (bgmAudioSource != null)
+        // 通过AudioManager应用设置
+        AudioManager audioManager = AudioManager.instance;
+        if (audioManager != null && audioManager.currentBGM != null)
         {
-            bgmAudioSource.mute = !isBgmEnabled;
+            audioManager.currentBGM.mute = !isBgmEnabled;
         }
         
         SaveSettings();
@@ -182,7 +187,13 @@ public class Setting : MonoBehaviour
         // 更新UI显示
         UpdateAudioStatusUI();
         
-        // 这里可以添加对全局音效管理器的设置
+        // 通过AudioManager应用设置
+        AudioManager audioManager = AudioManager.instance;
+        if (audioManager != null && audioManager.currentEffectMusic != null)
+        {
+            audioManager.currentEffectMusic.mute = !isSfxEnabled;
+        }
+        
         SaveSettings();
     }
 
@@ -267,9 +278,14 @@ public class Setting : MonoBehaviour
     /// </summary>
     public void PlayTestSound(AudioClip clip)
     {
-        if (clip != null && isSfxEnabled)
+        if (clip != null && isSfxEnabled && AudioManager.instance != null)
         {
-            AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position, defaultSfxVolume);
+            // 确保音效管理器可用
+            AudioManager audioManager = AudioManager.instance;
+            if (audioManager != null && audioManager.currentEffectMusic != null)
+            {
+                audioManager.currentEffectMusic.PlayOneShot(clip, defaultSfxVolume);
+            }
         }
     }
 }
