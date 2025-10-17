@@ -20,6 +20,14 @@ public class CardView : MonoBehaviour, IInputDetector
     private bool _hasMarkedDirty = false;
     public TMP_FontAsset FontAsset;
     
+    // 用于控制渲染顺序
+    [SerializeField]
+    private List<TextMeshPro> TextMeshPros = new();
+    [SerializeField]
+    private List<SpriteRenderer> SpriteRenderers = new();
+
+    // 用于记录卡牌状态
+    public CardViewState _cardViewState;
     void Awake()
     {
         _nameText = GetComponentInChildren<TextMeshPro>();
@@ -77,15 +85,22 @@ public class CardView : MonoBehaviour, IInputDetector
         foreach (var card in Card.ParentStack.Cards){
             if (card.IndexInStack >= Card.IndexInStack){
                 _cardGroup.Add(card.CardView);
+
+                card.CardView.SetRenderersSortingOrder(3100);
             }
         }
+        Stack oldStack = Card.ParentStack;
+        bool hasSplitStack = false;
         // 检测自己是否是堆的底部
         if (Card.IndexInStack != 1){
             SplitStack();
+            hasSplitStack = true;
         }
 
         // 设置拖拽中的卡牌列表
         CardSystem.instance.DraggingCardBoard.SetCards(_cardGroup.Select(c => c.Card).ToList());
+
+        _cardViewState = new CardViewState(transform.position, hasSplitStack, oldStack);
     }    
     public void OnDrag()
     {
@@ -114,6 +129,10 @@ public class CardView : MonoBehaviour, IInputDetector
         CardSystem.instance.DraggingCardBoard.ClearCards();
         
         //清除_cardGroup
+        foreach (var card in _cardGroup)
+        {
+            card.SetRenderersSortingOrder(0);
+        }
         _cardGroup.Clear();
 
         if (_stackView != null) _stackView.EnableCollider();
@@ -179,5 +198,36 @@ public class CardView : MonoBehaviour, IInputDetector
     {
         Debug.Log("OnHold");
     }
+
+    private void SetRenderersSortingOrder(int order)
+    {
+        foreach (var textMeshPro in TextMeshPros)
+        {
+            textMeshPro.sortingOrder = order;
+        }
+        foreach (var spriteRenderer in SpriteRenderers)
+        {
+            spriteRenderer.sortingOrder = order;
+        }
+    }
 }
 
+public class CardViewState{
+    public Vector3 Position;
+    public bool hasSplitStack;
+    public Stack oldStack;
+    public CardViewState(Vector3 position, bool hasSplitStack, Stack oldStack){
+        Position = position;
+        this.hasSplitStack = hasSplitStack;
+        this.oldStack = oldStack;
+    }
+
+    public void Revert(CardView cardView){
+        if (hasSplitStack){
+            StackSystem.instance.TryMerge(oldStack, cardView.Card.ParentStack);
+        }
+        else{
+            cardView.Card.ParentStack.StackView.transform.position = Position;
+        }
+    }
+}

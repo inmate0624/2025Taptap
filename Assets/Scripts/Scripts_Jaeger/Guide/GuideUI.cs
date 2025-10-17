@@ -38,7 +38,8 @@ public class GuideUI : MonoBehaviour
 
     private void ShowGuide()
     {
-
+        CardView cardView = CardSystem.instance.DraggingCardBoard.Cards[0].CardView;
+        ReturnCardViewState(cardView);
 
         if (CardSystem.instance.DraggingCardBoard.Cards.Count != 1) return;
         Debug.Log($"俺寻思：{CardSystem.instance.DraggingCardBoard.Cards[0].Description}");
@@ -47,6 +48,16 @@ public class GuideUI : MonoBehaviour
         if (_hasShowed) return;
         _hasShowed = true;
         _guideText.DOFade(1, _fadeDuration);
+
+    }
+
+    private void ReturnCardViewState(CardView cardView){
+        if (cardView._cardViewState == null){
+            Debug.LogError("CardViewState is null");
+            return;
+        }
+        cardView._cardViewState.Revert(cardView);
+        cardView._cardViewState = null;
     }
 
 

@@ -488,7 +488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.53333336}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1148,6 +1148,7 @@ MonoBehaviour:
   _image: {fileID: 1236304194}
   _text: {fileID: 793311201}
   _guideText: {fileID: 272922968}
+  _fadeDuration: 0.2
 --- !u!1 &1359282954
 GameObject:
   m_ObjectHideFlags: 0

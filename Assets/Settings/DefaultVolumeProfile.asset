@@ -345,18 +345,39 @@ MonoBehaviour:
   m_Name: RetroPixelArtPostProcess
   m_EditorClassIdentifier: 
   active: 1
-  settings:
-    pixelSize: 4
-    pixelAspectRatio: 1
-    paletteSize: 16
-    dithering: 0.3
-    scanlineIntensity: 0.2
-    scanlineDensity: 400
-    vignetteIntensity: 0.4
-    vignetteRadius: 0.8
-    saturation: 1.2
-    noiseIntensity: 0.05
-    enableEffect: 1
+  pixelSize:
+    m_OverrideState: 1
+    m_Value: 4
+  pixelAspectRatio:
+    m_OverrideState: 1
+    m_Value: 1
+  paletteSize:
+    m_OverrideState: 1
+    m_Value: 16
+  dithering:
+    m_OverrideState: 1
+    m_Value: 0.3
+  scanlineIntensity:
+    m_OverrideState: 1
+    m_Value: 0.2
+  scanlineDensity:
+    m_OverrideState: 1
+    m_Value: 400
+  vignetteIntensity:
+    m_OverrideState: 1
+    m_Value: 0.4
+  vignetteRadius:
+    m_OverrideState: 1
+    m_Value: 0.8
+  saturation:
+    m_OverrideState: 1
+    m_Value: 1.2
+  noiseIntensity:
+    m_OverrideState: 1
+    m_Value: 0.05
+  enableEffect:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &-4463884970436517307
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -388,24 +409,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21697723f3217a34db08c94df6386914, type: 3}
   m_Name: RetroCRTPostProcess
   m_EditorClassIdentifier: 
-  active: 1
+  m_Active: 1
   settings:
-    fisheyeIntensity: 0.1
-    fisheyeRadius: 0.5
-    scanlineIntensity: 0.3
-    scanlineDensity: 800
-    scanlineSpeed: 1
-    chromaticAberration: 0.002
-    noiseIntensity: 0.1
-    noiseScale: 50
-    screenCurvature: 0.02
-    brightness: 1
-    contrast: 1
-    vignetteIntensity: 0.3
-    vignetteRadius: 0.8
-    pixelSize: 1
-    colorSeparation: 0.003
-    enableEffect: 1
+    renderPassEvent: 550
+    material: {fileID: 0}
 --- !u!114 &-1410297666881709256
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -574,7 +581,6 @@ MonoBehaviour:
   - {fileID: -1410297666881709256}
   - {fileID: -6707355796555576315}
   - {fileID: -5085264882671219514}
-  - {fileID: -1554737501766075076}
 --- !u!114 &853819529557874667
 MonoBehaviour:
   m_ObjectHideFlags: 3
