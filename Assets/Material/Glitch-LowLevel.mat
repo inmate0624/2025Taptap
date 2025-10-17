@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Glitch
+  m_Name: Glitch-LowLevel
   m_Shader: {fileID: -6465566751694194690, guid: 4e66d5e9f48347545bfa3411cd2c9352, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
