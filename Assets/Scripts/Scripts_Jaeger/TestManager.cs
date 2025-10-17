@@ -42,7 +42,7 @@ public class TestManager : MonoBehaviour
         TestInput();
 
         LayerMask layerMask = LayerMask.GetMask("Card");
-        List<RaycastHit2D> hit = Physics2D.RaycastAll(Utility.GetMousePosition(), Vector2.zero, layerMask).ToList();
+        List<RaycastHit2D> hit = Physics2D.RaycastAll(UtilityJaeger.GetMousePosition(), Vector2.zero, layerMask).ToList();
         hit.RemoveAll(h => h.collider.gameObject.layer != LayerMask.NameToLayer("Card"));
         if (hit.Count == 0)
         {

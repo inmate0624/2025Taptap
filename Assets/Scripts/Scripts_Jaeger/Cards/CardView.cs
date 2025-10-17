@@ -70,7 +70,7 @@ public class CardView : MonoBehaviour, IInputDetector
         Card.ParentStack.MarkDirty();
         _hasMarkedDirty = true;
 
-        var mousePosition = Utility.GetMousePosition();
+        var mousePosition = UtilityJaeger.GetMousePosition();
         _dragOffset = transform.position - mousePosition;
 
         _cardGroup = new List<CardView>();
@@ -92,7 +92,7 @@ public class CardView : MonoBehaviour, IInputDetector
         if (!IsDragging) return;
 
         // Debug.Log($"OnDrag: {Card.GuidPrefix}");
-        var mousePosition = Utility.GetMousePosition();
+        var mousePosition = UtilityJaeger.GetMousePosition();
         var newPosition = mousePosition + _dragOffset;
 
         // 移动堆
@@ -121,7 +121,7 @@ public class CardView : MonoBehaviour, IInputDetector
 
     private void MergeCard(){
         // 检测鼠标位置是否与另一个卡牌碰撞
-        Vector3 worldPosition = Utility.GetMousePosition();
+        Vector3 worldPosition = UtilityJaeger.GetMousePosition();
         Collider2D[] colliders = Physics2D.OverlapPointAll(worldPosition);
         foreach (var collider in colliders)
         {

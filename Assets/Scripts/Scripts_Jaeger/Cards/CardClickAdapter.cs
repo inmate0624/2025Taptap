@@ -25,7 +25,7 @@ public class CardClickAdapter : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             // 命中自身 collider 才算
-            var mouseWorld = Utility.GetMousePosition();
+            var mouseWorld = UtilityJaeger.GetMousePosition();
             var col = GetComponent<Collider2D>();
             if (col != null && col.OverlapPoint(mouseWorld))
             {

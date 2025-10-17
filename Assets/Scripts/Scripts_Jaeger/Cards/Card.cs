@@ -15,6 +15,8 @@ public class Card
     public cfg.CardType DataType { get; private set; }
     public int Price { get; private set; }
     public bool IsStackable { get; private set; }
+    public string Description { get; private set; }
+    public CardTag Tag { get; private set; }
 
     // Runtime
     public readonly string Guid;
@@ -34,6 +36,8 @@ public class Card
         DataType = cardData.Type;
         Price = cardData.Price;
         IsStackable = true;
+        Description = cardData.Description;
+        Tag = cardData.Tag;
     }
 
     public override string ToString() => $"{Name} ({Id}) ({Guid})";
