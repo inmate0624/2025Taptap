@@ -17,7 +17,7 @@ public class CardView : MonoBehaviour, IInputDetector
     private List<CardView> _cardGroup = new();
     private Vector3 _dragOffset;
     private StackView _stackView => Card.ParentStack.StackView;
-
+    private bool _hasMarkedDirty = false;
     public TMP_FontAsset FontAsset;
     
     void Awake()
@@ -66,6 +66,10 @@ public class CardView : MonoBehaviour, IInputDetector
         IsDragging = true;
         _stackView.CancelCollider();
 
+        // 标记Stack为Dirty
+        Card.ParentStack.MarkDirty();
+        _hasMarkedDirty = true;
+
         var mousePosition = Utility.GetMousePosition();
         _dragOffset = transform.position - mousePosition;
 
@@ -98,6 +102,12 @@ public class CardView : MonoBehaviour, IInputDetector
     public void OnDragEnd()
     {
         IsDragging = false;
+
+        if (_hasMarkedDirty){
+            _hasMarkedDirty = false;
+            StackSystem.instance.RecheckStack(Card.ParentStack);
+        }
+
         MergeCard();
 
         // 清除拖拽信息记录板

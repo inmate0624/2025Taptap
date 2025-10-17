@@ -58,6 +58,14 @@ public class StackSystem : SingletonBase<StackSystem>, IStackSystem
         Debug.Log("TryMerge，但并未合成成功");
         return false;
     }
+
+    // 重新检查堆的配方情况（用于在堆发生变动后，重新检查配方情况）
+    public void RecheckStack(Stack stack){
+        if (stack == null) return;
+        Recipe recipe = RecipeSystem.instance.FindMatch(stack.Cards, out List<Card> matchedCards);
+        if (recipe == null) return;
+        RecipeSystem.instance.StartProcess(stack, recipe);
+    }
     
     /// <summary>
     /// 唯一的创建卡堆入口

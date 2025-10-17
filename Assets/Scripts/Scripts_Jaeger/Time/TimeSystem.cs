@@ -10,22 +10,21 @@ public class TimeSystem : SingletonBase<TimeSystem>
 {
     // 配置
     [Tooltip("每个游戏日的时长（秒）")]
-    public float dayDurationSeconds = 120f;
+    public float roundDurationSeconds = 120f;
 
     // 运行时状态
-    public int currentDay { get; private set; } = 1;
-    public float timeInCurrentDay { get; private set; } = 0f; // 已经流逝的秒
+    public int currentRound { get; private set; } = 1;
+    public float timeInCurrentRound { get; private set; } = 0f; // 已经流逝的秒
     public bool isPaused { get; private set; } = false;
 
     // 秒级 tick 累积器（减少频繁事件广播）
     private float _secondAccumulator = 0f;
-
     void Update()
     {
         if (isPaused) return;
 
         float dt = Time.deltaTime;
-        timeInCurrentDay += dt;
+        timeInCurrentRound += dt;
         _secondAccumulator += dt;
 
         // 每整秒广播一次 Tick（包含剩余秒数等）
@@ -34,13 +33,13 @@ public class TimeSystem : SingletonBase<TimeSystem>
             int consume = Mathf.FloorToInt(_secondAccumulator);
             _secondAccumulator -= consume;
 
-            int secondsElapsed = Mathf.FloorToInt(timeInCurrentDay);
-            int secondsLeft = Mathf.Max(0, Mathf.CeilToInt(dayDurationSeconds - timeInCurrentDay));
-            EventBus.Publish(new SecondTickEvent(currentDay, secondsElapsed, secondsLeft, GetDayProgress01()));
+            int secondsElapsed = Mathf.FloorToInt(timeInCurrentRound);
+            int secondsLeft = Mathf.Max(0, Mathf.CeilToInt(roundDurationSeconds - timeInCurrentRound));
+            EventBus.Publish(new SecondTickEvent(currentRound, secondsElapsed, secondsLeft, GetDayProgress01()));
         }
 
         // 到达日终
-        if (timeInCurrentDay >= dayDurationSeconds)
+        if (timeInCurrentRound >= roundDurationSeconds)
         {
             EndDayAndStartNext();
         }
@@ -52,14 +51,14 @@ public class TimeSystem : SingletonBase<TimeSystem>
     private void EndDayAndStartNext()
     {
         // 对齐到整天末尾
-        timeInCurrentDay = dayDurationSeconds;
-        EventBus.Publish(new DayEndedEvent(currentDay));
+        timeInCurrentRound = roundDurationSeconds;
+        EventBus.Publish(new DayEndedEvent(currentRound));
 
         // 切换到下一天
-        currentDay++;
-        timeInCurrentDay = 0f;
+        currentRound++;
+        timeInCurrentRound = 0f;
         _secondAccumulator = 0f;
-        EventBus.Publish(new DayStartedEvent(currentDay));
+        EventBus.Publish(new DayStartedEvent(currentRound));
     }
 
     public void Pause() => isPaused = true;
@@ -70,9 +69,9 @@ public class TimeSystem : SingletonBase<TimeSystem>
     /// </summary>
     public void ResetDays(float newDayDurationSeconds = -1f)
     {
-        if (newDayDurationSeconds > 0f) dayDurationSeconds = newDayDurationSeconds;
-        currentDay = 1;
-        timeInCurrentDay = 0f;
+        if (newDayDurationSeconds > 0f) roundDurationSeconds = newDayDurationSeconds;
+        currentRound = 1;
+        timeInCurrentRound = 0f;
         _secondAccumulator = 0f;
     }
 
@@ -81,8 +80,8 @@ public class TimeSystem : SingletonBase<TimeSystem>
     /// </summary>
     public float GetDayProgress01()
     {
-        if (dayDurationSeconds <= 0f) return 0f;
-        return Mathf.Clamp01(timeInCurrentDay / dayDurationSeconds);
+        if (roundDurationSeconds <= 0f) return 0f;
+        return Mathf.Clamp01(timeInCurrentRound / roundDurationSeconds);
     }
 }
 

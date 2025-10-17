@@ -36,7 +36,7 @@ public class RecipeSystem : SingletonBase<RecipeSystem>
             // 检查堆是否还有效（没被修改）
             if (p.stack.IsDirty)
             {
-                Debug.Log($"[{p.recipe.Id}] 被中断！");
+                Debug.Log($"[{p.recipe.Description}] 被中断！");
                 p.isRunning = false;
                 activeProcesses.RemoveAt(i);
                 continue;

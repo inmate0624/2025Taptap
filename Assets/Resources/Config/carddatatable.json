@@ -3,42 +3,49 @@
     "ID": "fruit",
     "name": "树莓",
     "type": 1,
+    "tag": 0,
     "price": 2
   },
   {
     "ID": "wood",
     "name": "木头",
     "type": 1,
+    "tag": 0,
     "price": 3
   },
   {
     "ID": "stone",
     "name": "石头",
     "type": 1,
+    "tag": 0,
     "price": 4
   },
   {
     "ID": "coin",
     "name": "金币",
     "type": 2,
+    "tag": 0,
     "price": 0
   },
   {
     "ID": "pack_basic",
     "name": "基础卡包",
     "type": 3,
+    "tag": 0,
     "price": 5
   },
   {
     "ID": "ash",
     "name": "灰烬",
     "type": 1,
+    "tag": 0,
     "price": 0
   },
   {
     "ID": "fire",
     "name": "火堆",
     "type": 4,
+    "tag": 0,
     "price": 0
   }
 ]

@@ -27,7 +27,7 @@ public class CardSystem : SingletonBase<CardSystem>
     {
         // 获取卡牌数据
         CardData cardData = CardDataList.Find(data => data.ID == id);
-        Debug.Log($"创建卡牌{name}");
+        // Debug.Log($"创建卡牌{name}");
 
         // 创建卡牌
         var card = new Card(cardData);
