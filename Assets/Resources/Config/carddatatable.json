@@ -3,30 +3,56 @@
     "ID": "fruit",
     "name": "树莓",
     "type": 1,
-    "price": 2
+    "tag": 0,
+    "price": 2,
+    "description": "这是一颗树莓"
   },
   {
     "ID": "wood",
     "name": "木头",
     "type": 1,
-    "price": 3
+    "tag": 0,
+    "price": 3,
+    "description": "这是一个木头"
   },
   {
     "ID": "stone",
     "name": "石头",
     "type": 1,
-    "price": 4
+    "tag": 0,
+    "price": 4,
+    "description": "一个石头"
   },
   {
     "ID": "coin",
     "name": "金币",
     "type": 2,
-    "price": 0
+    "tag": 0,
+    "price": 0,
+    "description": "金闪闪！"
   },
   {
     "ID": "pack_basic",
     "name": "基础卡包",
     "type": 3,
-    "price": 5
+    "tag": 0,
+    "price": 5,
+    "description": "我有抽卡瘾"
+  },
+  {
+    "ID": "ash",
+    "name": "灰烬",
+    "type": 1,
+    "tag": 0,
+    "price": 0,
+    "description": ""
+  },
+  {
+    "ID": "fire",
+    "name": "火堆",
+    "type": 4,
+    "tag": 0,
+    "price": 0,
+    "description": ""
   }
 ]
