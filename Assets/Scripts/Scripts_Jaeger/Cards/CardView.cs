@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -227,7 +228,13 @@ public class CardViewState{
             StackSystem.instance.TryMerge(oldStack, cardView.Card.ParentStack);
         }
         else{
-            cardView.Card.ParentStack.StackView.transform.position = Position;
+            cardView.Card.ParentStack.StackView.CancelCollider();
+            cardView.Card.ParentStack.StackView.transform.DOMove(Position, 0.2f).SetEase(Ease.OutSine).OnComplete(
+                () => 
+                {
+                    cardView.Card.ParentStack.StackView.EnableCollider();
+                }
+            );
         }
     }
 }
