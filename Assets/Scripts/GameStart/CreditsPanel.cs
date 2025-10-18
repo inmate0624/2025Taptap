@@ -28,6 +28,7 @@ public class CreditsPanel : MonoBehaviour
     [SerializeField] private float cardRotateRange = 15f; // 卡片旋转范围
     [SerializeField] private float dragSpeed = 1.0f; // 拖拽速度
     [SerializeField] private float mergeThreshold = 50f; // 卡片合并的距离阈值
+    [SerializeField] private float minSpawnSpacing = 120f; // 初始生成时卡片之间的最小间距（不均匀分散）
 
     [Header("彩蛋设置")]
     [SerializeField] private int maxCardsForEasterEgg = 5; // 触发彩蛋所需的最大卡片数 (5张堆叠显示合照)
@@ -152,31 +153,117 @@ public class CreditsPanel : MonoBehaviour
         // 计算总卡片数，确保不超过触发彩蛋的最大数量
         int cardCount = Mathf.Min(creditsData.Count, maxCardsForEasterEgg);
 
-        // 生成卡片并设置随机分布位置
-        for (int i = 0; i < cardCount; i++)
+        // 优先使用容器的 Rect 范围在可视区域内随机分散位置
+        RectTransform containerRect = cardsContainer as RectTransform;
+        if (cardPrefab != null && cardsContainer != null && containerRect != null)
         {
-            if (i < creditsData.Count && cardPrefab != null && cardsContainer != null)
+            List<Vector3> spawnPositions = GenerateSpawnPositionsInContainer(cardCount, containerRect, minSpawnSpacing);
+
+            for (int i = 0; i < spawnPositions.Count; i++)
             {
-                // 生成随机位置
-                float randomX = Random.Range(cardMinX, cardMaxX);
-                float randomY = Random.Range(cardMinY, cardMaxY);
-                Vector3 randomPos = new Vector3(randomX, randomY, 0);
-                
                 // 随机旋转角度
                 float randomRotation = Random.Range(-cardRotateRange, cardRotateRange);
                 Quaternion startRotation = Quaternion.Euler(0f, 0f, randomRotation);
-                
-                // 实例化卡片到随机位置
-                GameObject card = Instantiate(cardPrefab, randomPos, startRotation, cardsContainer);
-                activeCards.Add(card);
 
-                // 设置卡片数据
+                // 实例化卡片并设置局部坐标，确保在画面之中
+                GameObject card = Instantiate(cardPrefab, cardsContainer);
+                RectTransform cardRt = card.GetComponent<RectTransform>();
+                if (cardRt == null) cardRt = card.AddComponent<RectTransform>();
+                cardRt.anchoredPosition3D = spawnPositions[i];
+                cardRt.localRotation = startRotation;
+
+                activeCards.Add(card);
                 SetupCardData(card, creditsData[i], i);
-                
-                // 添加拖拽功能
                 AddDraggableComponent(card);
             }
         }
+        else
+        {
+            // 兜底：使用旧的 min/max 范围（可能不随画面变化）
+            for (int i = 0; i < cardCount; i++)
+            {
+                if (i < creditsData.Count && cardPrefab != null && cardsContainer != null)
+                {
+                    float randomX = Random.Range(cardMinX, cardMaxX);
+                    float randomY = Random.Range(cardMinY, cardMaxY);
+                    Vector3 randomPos = new Vector3(randomX, randomY, 0);
+
+                    float randomRotation = Random.Range(-cardRotateRange, cardRotateRange);
+                    Quaternion startRotation = Quaternion.Euler(0f, 0f, randomRotation);
+
+                    GameObject card = Instantiate(cardPrefab, randomPos, startRotation, cardsContainer);
+                    activeCards.Add(card);
+                    SetupCardData(card, creditsData[i], i);
+                    AddDraggableComponent(card);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 在给定 UI 容器的 Rect 范围内生成随机分散的位置（具有最小间距，呈不均匀分布）。
+    /// 返回局部坐标（anchoredPosition3D）。
+    /// </summary>
+    private List<Vector3> GenerateSpawnPositionsInContainer(int requiredCount, RectTransform container, float minSpacing)
+    {
+        List<Vector3> positions = new List<Vector3>();
+        if (container == null || requiredCount <= 0)
+        {
+            return positions;
+        }
+
+        Rect rect = container.rect;
+        // 为了避免贴边，可预留轻微的边距
+        float padding = Mathf.Min(Mathf.Abs(rect.width), Mathf.Abs(rect.height)) * 0.05f;
+        float xMin = rect.xMin + padding;
+        float xMax = rect.xMax - padding;
+        float yMin = rect.yMin + padding;
+        float yMax = rect.yMax - padding;
+
+        int maxAttemptsPerPoint = 40;
+        for (int i = 0; i < requiredCount; i++)
+        {
+            bool placed = false;
+            float dynamicSpacing = minSpacing; // 若难以放置，会逐步降低
+
+            for (int attempt = 0; attempt < maxAttemptsPerPoint && !placed; attempt++)
+            {
+                float rx = Random.Range(xMin, xMax);
+                float ry = Random.Range(yMin, yMax);
+                Vector3 candidate = new Vector3(rx, ry, 0f);
+
+                bool tooClose = false;
+                for (int j = 0; j < positions.Count; j++)
+                {
+                    if (Vector2.Distance(positions[j], candidate) < dynamicSpacing)
+                    {
+                        tooClose = true;
+                        break;
+                    }
+                }
+
+                if (!tooClose)
+                {
+                    positions.Add(candidate);
+                    placed = true;
+                    break;
+                }
+
+                // 逐步放宽最小间距，提升成功率，但依然保持不均匀分散
+                if ((attempt + 1) % 10 == 0)
+                {
+                    dynamicSpacing *= 0.85f;
+                }
+            }
+
+            if (!placed)
+            {
+                // 兜底：直接放置一个随机点（极少发生）
+                positions.Add(new Vector3(Random.Range(xMin, xMax), Random.Range(yMin, yMax), 0f));
+            }
+        }
+
+        return positions;
     }
     
     /// <summary>
