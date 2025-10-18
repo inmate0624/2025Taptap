@@ -18,7 +18,9 @@ public sealed partial class RecipeData : Luban.BeanBase
     public RecipeData(JSONNode _buf) 
     {
         { if(!_buf["ID"].IsString) { throw new SerializationException(); }  ID = _buf["ID"]; }
+        { if(!_buf["description"].IsString) { throw new SerializationException(); }  Description = _buf["description"]; }
         { var __json0 = _buf["inputList"]; if(!__json0.IsArray) { throw new SerializationException(); } InputList = new System.Collections.Generic.List<string>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { string __v0;  { if(!__e0.IsString) { throw new SerializationException(); }  __v0 = __e0; }  InputList.Add(__v0); }   }
+        { var __json0 = _buf["usedCardList"]; if(!__json0.IsArray) { throw new SerializationException(); } UsedCardList = new System.Collections.Generic.List<string>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { string __v0;  { if(!__e0.IsString) { throw new SerializationException(); }  __v0 = __e0; }  UsedCardList.Add(__v0); }   }
         { if(!_buf["isStrict"].IsBoolean) { throw new SerializationException(); }  IsStrict = _buf["isStrict"]; }
         { if(!_buf["workTime"].IsNumber) { throw new SerializationException(); }  WorkTime = _buf["workTime"]; }
         { var __json0 = _buf["actions"]; if(!__json0.IsArray) { throw new SerializationException(); } Actions = new System.Collections.Generic.List<CardAction>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { CardAction __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.CardAction.DeserializeCardAction(__e0);  }  Actions.Add(__v0); }   }
@@ -33,10 +35,15 @@ public sealed partial class RecipeData : Luban.BeanBase
     /// 唯一标识符
     /// </summary>
     public readonly string ID;
+    public readonly string Description;
     /// <summary>
     /// 配方列表
     /// </summary>
     public readonly System.Collections.Generic.List<string> InputList;
+    /// <summary>
+    /// 消耗卡牌列表
+    /// </summary>
+    public readonly System.Collections.Generic.List<string> UsedCardList;
     /// <summary>
     /// 严格按照配方顺序
     /// </summary>
@@ -62,7 +69,9 @@ public sealed partial class RecipeData : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
+        + "description:" + Description + ","
         + "inputList:" + Luban.StringUtil.CollectionToString(InputList) + ","
+        + "usedCardList:" + Luban.StringUtil.CollectionToString(UsedCardList) + ","
         + "isStrict:" + IsStrict + ","
         + "workTime:" + WorkTime + ","
         + "actions:" + Luban.StringUtil.CollectionToString(Actions) + ","

@@ -79,7 +79,7 @@ public class StackView : MonoBehaviour
 
     private void UpdateProgress(){
         if (Stack == null) return;
-        float p = CardEventSystem.instance.GetStackProgress(Stack);
+        float p = RecipeSystem.instance.GetStackProgress(Stack);
         bool processing = p >= 0f;
 
         if (processing)

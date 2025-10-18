@@ -146,6 +146,58 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+--- !u!114 &-6707355796555576315
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4ecc14b3e7a094ab6d6c5ff70e5861, type: 3}
+  m_Name: CRTScanlineVolume
+  m_EditorClassIdentifier: 
+  active: 1
+  fisheyeIntensity:
+    m_OverrideState: 1
+    m_Value: 0.1
+  fisheyeRadius:
+    m_OverrideState: 1
+    m_Value: 0.5
+  scanlineIntensity:
+    m_OverrideState: 1
+    m_Value: 0.3
+  scanlineDensity:
+    m_OverrideState: 1
+    m_Value: 800
+  scanlineSpeed:
+    m_OverrideState: 1
+    m_Value: 1
+  chromaticAberration:
+    m_OverrideState: 1
+    m_Value: 0.002
+  noiseIntensity:
+    m_OverrideState: 1
+    m_Value: 0.1
+  noiseScale:
+    m_OverrideState: 1
+    m_Value: 50
+  screenCurvature:
+    m_OverrideState: 1
+    m_Value: 0.02
+  brightness:
+    m_OverrideState: 1
+    m_Value: 1
+  contrast:
+    m_OverrideState: 1
+    m_Value: 1
+  vignetteIntensity:
+    m_OverrideState: 1
+    m_Value: 0.3
+  vignetteRadius:
+    m_OverrideState: 1
+    m_Value: 0.8
 --- !u!114 &-6335409530604852063
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -280,6 +332,52 @@ MonoBehaviour:
   SunScatteringIntensity:
     m_OverrideState: 1
     m_Value: 2
+--- !u!114 &-5085264882671219514
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54796492abf88a54cac374ec18254e08, type: 3}
+  m_Name: RetroPixelArtPostProcess
+  m_EditorClassIdentifier: 
+  active: 1
+  pixelSize:
+    m_OverrideState: 1
+    m_Value: 4
+  pixelAspectRatio:
+    m_OverrideState: 1
+    m_Value: 1
+  paletteSize:
+    m_OverrideState: 1
+    m_Value: 16
+  dithering:
+    m_OverrideState: 1
+    m_Value: 0.3
+  scanlineIntensity:
+    m_OverrideState: 1
+    m_Value: 0.2
+  scanlineDensity:
+    m_OverrideState: 1
+    m_Value: 400
+  vignetteIntensity:
+    m_OverrideState: 1
+    m_Value: 0.4
+  vignetteRadius:
+    m_OverrideState: 1
+    m_Value: 0.8
+  saturation:
+    m_OverrideState: 1
+    m_Value: 1.2
+  noiseIntensity:
+    m_OverrideState: 1
+    m_Value: 0.05
+  enableEffect:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &-4463884970436517307
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -299,6 +397,22 @@ MonoBehaviour:
   cropToFit:
     m_OverrideState: 1
     m_Value: 1
+--- !u!114 &-1554737501766075076
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21697723f3217a34db08c94df6386914, type: 3}
+  m_Name: RetroCRTPostProcess
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    renderPassEvent: 550
+    material: {fileID: 0}
 --- !u!114 &-1410297666881709256
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -465,6 +579,8 @@ MonoBehaviour:
   - {fileID: -6288072647309666549}
   - {fileID: 7518938298396184218}
   - {fileID: -1410297666881709256}
+  - {fileID: -6707355796555576315}
+  - {fileID: -5085264882671219514}
 --- !u!114 &853819529557874667
 MonoBehaviour:
   m_ObjectHideFlags: 3

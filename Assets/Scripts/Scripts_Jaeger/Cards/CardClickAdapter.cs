@@ -25,7 +25,7 @@ public class CardClickAdapter : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             // 命中自身 collider 才算
-            var mouseWorld = Utility.GetMousePosition();
+            var mouseWorld = UtilityJaeger.GetMousePosition();
             var col = GetComponent<Collider2D>();
             if (col != null && col.OverlapPoint(mouseWorld))
             {
@@ -51,7 +51,7 @@ public class CardClickAdapter : MonoBehaviour
             {
                 // 单击（延迟留给可能的第二击，这里直接触发即可，复杂需求可做协程延迟）
                 _lastClickTime = t;
-                CardEventSystem.instance.TriggerClick(_cardView.Card);
+                // CardEventSystem.instance.TriggerClick(_cardView.Card);
             }
         }
     }

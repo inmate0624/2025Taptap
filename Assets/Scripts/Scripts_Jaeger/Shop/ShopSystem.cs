@@ -36,7 +36,7 @@ public class ShopSystem: MonoBehaviour
         // 当鼠标放手时检测商店区域
         if (Input.GetMouseButtonUp(0)){
             // 检测鼠标是否命中商店区域
-            List<RaycastHit2D> hits = Physics2D.RaycastAll(Utility.GetMousePosition(), Vector2.zero).ToList();
+            List<RaycastHit2D> hits = Physics2D.RaycastAll(UtilityJaeger.GetMousePosition(), Vector2.zero).ToList();
             hits.RemoveAll(h => h.collider.gameObject.layer != LayerMask.NameToLayer("ShopArea"));
             if (hits.Count > 0){
                 Debug.Log("命中商店区域");

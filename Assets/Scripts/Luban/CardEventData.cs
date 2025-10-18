@@ -18,6 +18,7 @@ public sealed partial class CardEventData : Luban.BeanBase
     public CardEventData(JSONNode _buf) 
     {
         { if(!_buf["ID"].IsString) { throw new SerializationException(); }  ID = _buf["ID"]; }
+        { if(!_buf["description"].IsString) { throw new SerializationException(); }  Description = _buf["description"]; }
         { if(!_buf["cardId"].IsString) { throw new SerializationException(); }  CardId = _buf["cardId"]; }
         { if(!_buf["triggerType"].IsNumber) { throw new SerializationException(); }  TriggerType = (CardEventType)_buf["triggerType"].AsInt; }
         { var __json0 = _buf["actions"]; if(!__json0.IsArray) { throw new SerializationException(); } Actions = new System.Collections.Generic.List<CardAction>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { CardAction __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.CardAction.DeserializeCardAction(__e0);  }  Actions.Add(__v0); }   }
@@ -32,6 +33,10 @@ public sealed partial class CardEventData : Luban.BeanBase
     /// 唯一标识符
     /// </summary>
     public readonly string ID;
+    /// <summary>
+    /// 描述
+    /// </summary>
+    public readonly string Description;
     /// <summary>
     /// 触发者
     /// </summary>
@@ -57,6 +62,7 @@ public sealed partial class CardEventData : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
+        + "description:" + Description + ","
         + "cardId:" + CardId + ","
         + "triggerType:" + TriggerType + ","
         + "actions:" + Luban.StringUtil.CollectionToString(Actions) + ","

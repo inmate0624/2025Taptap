@@ -22,5 +22,6 @@ public static class DataManager
     /// </summary>
     /// <returns></returns>
     public static List<CardData> GetAllCardData() => _tables.CardDataTable.DataList;
-
+    public static List<RecipeData> GetAllRecipeData() => _tables.RecipeDataTable.DataList;
+    public static List<CardEventData> GetAllCardEventData() => _tables.CardEventDataTable.DataList;
 }

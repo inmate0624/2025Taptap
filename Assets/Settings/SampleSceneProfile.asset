@@ -47,6 +47,58 @@ MonoBehaviour:
   dirtIntensity:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &-7490548020346606923
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4ecc14b3e7a094ab6d6c5ff70e5861, type: 3}
+  m_Name: CRTScanlineVolume
+  m_EditorClassIdentifier: 
+  active: 0
+  fisheyeIntensity:
+    m_OverrideState: 1
+    m_Value: 0.1
+  fisheyeRadius:
+    m_OverrideState: 0
+    m_Value: 0.5
+  scanlineIntensity:
+    m_OverrideState: 0
+    m_Value: 0.3
+  scanlineDensity:
+    m_OverrideState: 0
+    m_Value: 800
+  scanlineSpeed:
+    m_OverrideState: 0
+    m_Value: 1
+  chromaticAberration:
+    m_OverrideState: 0
+    m_Value: 0.002
+  noiseIntensity:
+    m_OverrideState: 0
+    m_Value: 0.1
+  noiseScale:
+    m_OverrideState: 0
+    m_Value: 50
+  screenCurvature:
+    m_OverrideState: 0
+    m_Value: 0.02
+  brightness:
+    m_OverrideState: 0
+    m_Value: 1
+  contrast:
+    m_OverrideState: 0
+    m_Value: 1
+  vignetteIntensity:
+    m_OverrideState: 0
+    m_Value: 0.3
+  vignetteRadius:
+    m_OverrideState: 0
+    m_Value: 0.8
 --- !u!114 &-3357603926938260329
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -92,6 +144,7 @@ MonoBehaviour:
   - {fileID: -7893295128165547882}
   - {fileID: 7391319092446245454}
   - {fileID: -3357603926938260329}
+  - {fileID: -7490548020346606923}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3
